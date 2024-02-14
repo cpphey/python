@@ -1,40 +1,109 @@
-def compose(*callables):
-    def composition(x):
-        for callable in callables:
-            x = callable(x)
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+from typing import Callable
+
+def add(*args):
+    result = 0
+    for x in args:
+        result += x
+    return result
+
+
+def square(a):
+    if isinstance(a, (list, tuple)):
+        return [b * b for b in a]
+    return a * a
+
+
+def splitter(a):
+    if isinstance(a, (list, tuple)):
+        return sum([splitter(b) for b in a], [])
+    return [a // 2, (a + 1) // 2]
+
+
+def my_max(a):
+    if isinstance(a, (list, tuple)):
+        return max(a)
+    return a
+
+
+def my_min(a):
+    if isinstance(a, (list, tuple)):
+        return min(a)
+    return a
+
+#
+# Complete the 'compose' function below.
+#
+# The function is expected to return a FUNCTION.
+# The function accepts following parameters:
+#  1. ARGUMENTS *functionsList
+#
+def compose(*functionsList: Callable) -> Callable:
+    # Write your code here
+    #return functionsList[0]
+    return composeHelper(functionsList)
+
+def composeB(*functionsList: Callable) -> Callable:
+    # Write your code here
+    numF=functionsList[0]
+    return numF
+    #print(numF)
+    #return 0
+    fList=functionsList[1:numF]
+    numArg=functionsList[numF]
+    argList=functionsList[numF:]
+    #return composeHelper(fList)(argList)
+
+def composeHelper(*functionsList: Callable) -> Callable:
+#def composeHelper(*functionsList):
+    # Write your code here
+    #print (functionsList[0])
+    #print ("haha")
+    #return 0
+    def abhi(x):
+        for c in functionsList:
+            x = c(x)
         return x
+    return abhi
 
-    return composition
+#print ("hello")
+if __name__ == '__main__':
+#    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
+    functionMapper = {
+        "add": add,
+        "square": square,
+        "splitter": splitter,
+        "my_max": my_max,
+        "my_min": my_min,
+    }
 
-def meter2centimeter(dist):
-    """ Converting m to cm """
-    return dist * 100
+    functionsList_count = int(input().strip())
 
+    functionsList = []
 
-def centimeter2feet(dist):
-    """ Converting cm to ft """
-    return dist / 30.48
+    for _ in range(functionsList_count):
+        functionsList_item = input()
+        functionsList.append(functionMapper[functionsList_item])
 
+    composedFunctions = compose(*functionsList)
 
-def feet2inches(dist):
-    """ Converting ft to in """
-    return dist * 12
+    argumentsList_count = int(input().strip())
 
+    argumentsList = []
 
-#output=compose(feet2inches, centimeter2feet, meter2centimeter)(1.4)
+    for _ in range(argumentsList_count):
+        argumentsList_item = int(input().strip())
+        argumentsList.append(argumentsList_item)
 
+    result = composedFunctions(*argumentsList)
 
-def compose2(callables):
-    def composition(x):
-        for callable in callables:
-            x = callable(x)
-        return x
+#    fptr.write(str(result) + "\n")
 
-    return composition
-
-fList=[feet2inches, centimeter2feet, meter2centimeter]
-foo=compose2(fList)
-output=foo(1.4)
-temp=10
-#works
+#    fptr.close()
