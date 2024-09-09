@@ -5,8 +5,8 @@ def a():
     #var = raw_input("enter something:") #older version
     print (var)
 def b():
-       print (one)
-    print (two)
+    pass #print (one)
+    pass #print (two)
 
 def c(arg):
     return (square := arg**2) / (square**2 / arg ) #assignment_expression walrus operator

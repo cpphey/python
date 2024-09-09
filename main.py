@@ -9,9 +9,16 @@ def print_hi(name):
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
+class N:
+    def __init__(self, arg: 10):
+        self.A = arg
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
-
+    obj = N(20)
+    print(vars(obj))
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 # Changes
