@@ -32,3 +32,59 @@ for i in input:
 
 
 temp1=10
+
+
+########################################################################################################################
+
+################  POWER SET AGAIN  #####################################################################################
+
+########################################################################################################################
+def powerSetString(arg):
+    ps=[]
+
+    for e in arg:
+        origPs=ps
+        copyPs=copy.deepcopy(origPs)
+        for i in range(len(copyPs)):
+            copyPs[i]=copyPs[i]+e
+        copyPs.append(e)
+        #ps = list(set(ps+copyPs)) #uneeded since no multiple copies
+        ps = ps + copyPs
+
+    #ps.remove("") #remove emoty set, otherwise put an if statement
+    return ps
+
+
+def powerSetGeneral(arg):
+    ps=[]
+
+    for e in arg:
+        origPs=ps
+        copyPs=copy.deepcopy(origPs)
+        for i in range(len(copyPs)):
+            copyPs[i].append(e)
+        copyPs.append([e])
+        #ps = list(set(ps+copyPs)) #uneeded since no multiple copies
+        ps = ps + copyPs
+
+    #ps.remove("") #remove emoty set, otherwise put an if statement
+    return ps
+
+
+if __name__=="__main__":
+    print("Main func")
+    #ps=powerSetString("umbrella")
+    ps = powerSetString("ab")
+    print(ps)
+
+    ps = powerSetGeneral("a")
+    print(ps)
+
+    ps = powerSetGeneral("ab")
+    print(ps)
+
+    ps = powerSetGeneral([1])
+    print(ps)
+
+    ps = powerSetGeneral([1,2])
+    print(ps)
