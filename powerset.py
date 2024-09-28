@@ -71,7 +71,7 @@ def powerSetGeneral(arg):
     return ps
 
 
-if __name__=="__main__":
+if __name__=="__main1__":
     print("Main func")
     #ps=powerSetString("umbrella")
     ps = powerSetString("ab")
@@ -88,3 +88,23 @@ if __name__=="__main__":
 
     ps = powerSetGeneral([1,2])
     print(ps)
+
+
+
+
+def anotherImpl(arg):
+    ps=[[]]
+    for e in arg:
+        loop_arr=copy.deepcopy(ps)
+        #Add e to each element in cp
+        for ee in loop_arr:
+            ee.append(e)
+
+        #Combina cp and orig to new orig
+        ps = ps+loop_arr
+
+    return ps
+
+if __name__=="__main__":
+    print(anotherImpl([1,2,3]))
+
