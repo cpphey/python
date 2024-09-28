@@ -51,7 +51,8 @@ class Graph:
             children=self.getChildren(node)
             for child in children:
 #                if child not in visited:
-                 if child not in set(visited+toBeVisited):
+#                 if child not in set(visited+toBeVisited):
+                if child not in visited+toBeVisited:
                     toBeVisited.append(child)
         return
 
