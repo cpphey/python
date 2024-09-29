@@ -259,8 +259,10 @@ def main_graph_6_directed():
     g.add_edge_directed(4, 2, 6)  # E -> C, weight 6
     g.add_edge_directed(1, 2, 1)  # B -> C, weight 1
     g.add_edge_directed(2, 0, -2)  # C -> A, weight -2
+    #Added 3 more edges to test max flow
     g.add_edge_directed(1, 5, 20)
     g.add_edge_directed(0, 5, 20)
+    g.add_edge_directed(2, 5, 20)
     return g
 
 def main_graph_5():
@@ -288,6 +290,6 @@ def main():
 
     g = main_graph_6_directed()
     flow, flow_graph = g.fordFulkerson(3,5)
-    print("Min flow is "+str(flow))
+    print("Max flow is "+str(flow))
 
 main()
