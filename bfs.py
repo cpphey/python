@@ -200,7 +200,7 @@ class Graph:
 
 
     def fordFulkerson(self, s, t):
-        return self.edmondKarp(s, t)
+        return self.edmondKarp(s, t) #Calling Edmund Karp because its using bfs for traversal
 
     #Uses Bfs for traversal
     def edmondKarp(self, s, t):
@@ -216,7 +216,7 @@ class Graph:
 
         #Swap graphs since we always checking for path in residual graph
         #Residual graph becomes self.graph
-        temp=copy.deepcopy(self.graph)
+        orig_graph=copy.deepcopy(self.graph)
         self.graph = graph_residual
         flow_graph = []
         for a in range(self.size):
@@ -235,6 +235,8 @@ class Graph:
             residual_path = [ a for a in reversed(flow_path)]
             self.addCapacity(self.graph,residual_path,-1*flow_capacity_path)
 
+        #Copy back the original graph
+        self.graph = orig_graph
         return flow_capacity, flow_graph
 
 def main_graph_5_directed():
