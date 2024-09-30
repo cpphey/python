@@ -37,7 +37,7 @@ class Graph:
             #add them to queue
             queue = queue + children_unvisited
 
-if __name__== "__main__":
+def main():
     g = Graph(5)
     g.add_edge_undirected(3, 0, 4)  # D -> A, weight 4
     g.add_edge_undirected(3, 2, 7)  # D -> C, weight 7
@@ -48,3 +48,50 @@ if __name__== "__main__":
     g.add_edge_undirected(2, 0, 2)
 
     g.bfs(3)
+
+#######################################
+############## KRUSKAL ################
+#######################################
+class DisjointSet:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, u):
+        if self.parent[u] != u:
+            self.parent[u] = self.find(self.parent[u])
+        return self.parent[u]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+        if root_u != root_v:
+            if self.rank[root_u] > self.rank[root_v]:
+                self.parent[root_v] = root_u
+            elif self.rank[root_u] < self.rank[root_v]:
+                self.parent[root_u] = root_v
+            else:
+                self.parent[root_v] = root_u
+                self.rank[root_u] += 1
+
+def kruskal(n, edges):
+    ds = DisjointSet(n)
+    mst = []
+    edges.sort(key=lambda x: x[2])  # Sort by weight
+    for u, v, weight in edges:
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            mst.append((u, v, weight))
+    return mst
+
+# Example usage
+def main_kruskal():
+    edges = [
+        (0, 1, 10), (0, 2, 6), (0, 3, 5),
+        (1, 3, 15), (2, 3, 4)
+    ]
+    n = 4  # Number of vertices
+    mst = kruskal(n, edges)
+    print("Minimum Spanning Tree:", mst)
+
+main_kruskal()

@@ -184,7 +184,7 @@ class Graph:
         return min(capacity)
 
     #Like dijkstra with back tracking
-    def isPath(self,s,t):
+    def doesPathExist(self, s, t):
         distances, paths = self.dijkstraWithBackTrack(s)
         ret = None, None
         if distances[t] != math.inf: #important since ONLY +ve distance is carried
@@ -223,9 +223,9 @@ class Graph:
             flow_graph.append([0]*self.size)
 
         #As long as flow in s->t in residual graph
-        flow_capacity, flow_capacity_path = 0, 1
+        flow_capacity, flow_capacity_path = 0, 1 #1 because it will enter the while loop
         while flow_capacity_path:
-            flow_capacity_path, flow_path = self.isPath(t,s)
+            flow_capacity_path, flow_path = self.doesPathExist(t, s)
             if flow_capacity_path == None:
                 break
             flow_capacity += flow_capacity_path
@@ -277,6 +277,16 @@ def main_graph_5():
     g.add_edge_undirected(2, 0, 2)  # C -> A, weight -2
     return g
 
+#https://www.geeksforgeeks.org/maximum-flow-problem-in-python/
+def anotherOne():
+    graph = [[0, 16, 13, 0, 0, 0],
+             [0, 0, 10, 12, 0, 0],
+             [0, 4, 0, 0, 14, 0],
+             [0, 0, 9, 0, 0, 20],
+             [0, 0, 0, 7, 0, 4],
+             [0, 0, 0, 0, 0, 0]]
+    return graph
+
 def main():
     print("Main Function")
     g = main_graph_5_directed()
@@ -290,6 +300,11 @@ def main():
 
     g = main_graph_6_directed()
     flow, flow_graph = g.fordFulkerson(3,5)
+    print("Max flow is "+str(flow))
+
+    g = Graph(6)
+    g.graph = anotherOne()
+    flow, flow_graph = g.fordFulkerson(0,5)
     print("Max flow is "+str(flow))
 
 main()
