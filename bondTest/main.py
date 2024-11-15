@@ -48,7 +48,7 @@ import datetime
 # price = 111.302
 # settlement_days = 2
 # face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #B8
@@ -76,10 +76,11 @@ import datetime
 # end_date = ql.Date(1, 5, 2025)
 # coupon_rate = 0.05
 # price = 99.704
-# settlement_days = 2
+# settlement_days = 0
 # face_value = 100.0
 # bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
+
 
 #g38
 # issue_date = ql.Date(17, 11, 2014)
@@ -92,14 +93,14 @@ import datetime
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #W7
-issue_date = ql.Date(15, 1, 2016)
-end_date = ql.Date(15, 1, 2026)
-coupon_rate = 0.0571
-price = 99.8875
-settlement_days = 2
-face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
+# issue_date = ql.Date(15, 1, 2016)
+# end_date = ql.Date(15, 1, 2026)
+# coupon_rate = 0.0571
+# price = 99.8875
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
@@ -123,15 +124,23 @@ ql.Settings.instance().evaluationDate = todays_date
 schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
                        bondCalendar , ql.Following , ql.Following ,
                        ql.DateGeneration.Backward, False)
+# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bonds/fixedratebond.cpp
+# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bond.cpp#L251
+bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, ql.Unadjusted )  #added ql.Unadjusted
 
-bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter)
+debug_price = bond.dirtyPrice(coupon_rate,ql.ActualActual(ql.ActualActual.ISMA),ql.Compounded,ql.Annual)-bond.accruedAmount(todays_date)
+
+#https://quant.stackexchange.com/questions/68450/quantlib-match-clean-price-with-bbg-clean-price
+#print(round(fixedRateBond.dirtyPrice(0.025,ql.ActualActual(ql.ActualActual.ISMA),
+#ql.Compounded,ql.Annual),6)-round(fixedRateBond.accruedAmount(ql.Date(15,10,2021)),3))
+print("debug")
 
 # Yield to Maturity (YTM)
 clean_price = price
 ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual) #SimpleThenCompounded
+ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)
 print(f"Yield to Maturity (YTM): {ytm * 100:.4f}%")
-# bond.dirtyPrice()
-# print(str())
+
 
 # Duration and Convexity
 #yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)#SimpleThenCompounded
