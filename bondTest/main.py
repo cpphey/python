@@ -123,9 +123,9 @@ bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #2AS5
-issue_date = ql.Date(15,5,2017)
+issue_date = ql.Date(10,5,2017)
 end_date = ql.Date(15,3,2027)
-coupon_rate = 0.05
+coupon_rate = 0.05 #0.049845
 price = 100.129
 settlement_days = 1
 face_value = 100.0
