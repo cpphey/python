@@ -33,15 +33,77 @@ import datetime
 # bondCalendar = ql.Canada()
 
 #https://treasurydirect.gov/auctions/auction-query/?cusip=912810UE6
-issue_date = ql.Date(15, 11, 2024)
-end_date = ql.Date(15, 11, 2054)
-coupon_rate = 0.045
-price = 98.253773
+# issue_date = ql.Date(15, 11, 2024)
+# end_date = ql.Date(15, 11, 2054)
+# coupon_rate = 0.045
+# price = 98.253773
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
+
+#Y8
+# issue_date = ql.Date(31, 12, 2008)
+# end_date = ql.Date(1, 11, 2031)
+# coupon_rate = 0.08
+# price = 111.302
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#B8
+# issue_date = ql.Date(5, 2, 1996)
+# end_date = ql.Date(5, 2, 2026)
+# coupon_rate = 0.0845
+# price = 106.0025
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar = ql.Canada()
+#day_counter = ql.ActualActual(ql.ActualActual.Actual365)
+
+#P8
+# issue_date = ql.Date(30, 5, 1995)
+# end_date = ql.Date(30, 5, 2025)
+# coupon_rate = 0.0875
+# price = 102.788
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar = ql.Canada()
+#day_counter = ql.ActualActual(ql.ActualActual.Actual365)
+
+#p4
+# issue_date = ql.Date(28, 10, 2014)
+# end_date = ql.Date(1, 5, 2025)
+# coupon_rate = 0.05
+# price = 99.704
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#g38
+# issue_date = ql.Date(17, 11, 2014)
+# end_date = ql.Date(15, 11, 2024)
+# coupon_rate = 0.0225
+# price = 100.185 #99.31
+# settlement_days = 2
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#W7
+issue_date = ql.Date(15, 1, 2016)
+end_date = ql.Date(15, 1, 2026)
+coupon_rate = 0.0571
+price = 99.8875
 settlement_days = 2
 face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
 
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
 
 
 # Setup schedule and bond
@@ -52,7 +114,6 @@ print("Todays Date is: "+formatted_date)
 ql.Settings.instance().evaluationDate = todays_date
 
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/schedule.hpp
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/schedule.cpp
 # schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
 #                        bondCalendar , ql.Unadjusted, ql.Unadjusted,
 #                        ql.DateGeneration.Backward, False)
@@ -63,7 +124,6 @@ schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
                        bondCalendar , ql.Following , ql.Following ,
                        ql.DateGeneration.Backward, False)
 
-day_counter = ql.Thirty360(ql.Thirty360.USA)
 bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter)
 
 # Yield to Maturity (YTM)
