@@ -30,7 +30,7 @@ import datetime
 # price = 101.0625
 # settlement_days = 2
 # face_value = 100.0
-bondCalendar = ql.Canada()
+# bondCalendar = ql.Canada()
 
 #https://treasurydirect.gov/auctions/auction-query/?cusip=912810UE6
 issue_date = ql.Date(15, 11, 2024)
@@ -39,7 +39,10 @@ coupon_rate = 0.045
 price = 98.253773
 settlement_days = 2
 face_value = 100.0
-#bondCalendar = ql.UnitedStates()
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
+
+
 
 # Setup schedule and bond
 today = datetime.date.today()
