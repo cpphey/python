@@ -102,6 +102,45 @@ import datetime
 # bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
 
+#1AH2
+issue_date = ql.Date(28,4,2016)
+end_date = ql.Date(15,4,2026)
+coupon_rate = 0.05375
+price = 100.0115
+settlement_days = 1
+face_value = 100.0
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#GAE3
+issue_date = ql.Date(11,3,2014)
+end_date = ql.Date(15,3,2044)
+coupon_rate = 0.05375
+price = 93.117
+settlement_days = 1
+face_value = 100.0
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#2AS5
+issue_date = ql.Date(15,5,2017)
+end_date = ql.Date(15,3,2027)
+coupon_rate = 0.05
+price = 100.129
+settlement_days = 1
+face_value = 100.0
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#VAB2
+issue_date = ql.Date(8,2,2017)
+end_date = ql.Date(15,8,2026)
+coupon_rate = 0.05125
+price = 99.9125
+settlement_days = 1
+face_value = 100.0
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp

@@ -1,20 +1,16 @@
 import QuantLib as ql
 import datetime
 
-#P8
-issue_date = ql.Date(30, 5, 1995)
-end_date = ql.Date(30, 5, 2025)
-coupon_rate = 0.0875
-price = 102.788
-settlement_days = 2
+#2AS5
+issue_date = ql.Date(15,5,2017)
+end_date = ql.Date(15,3,2027)
+coupon_rate = 0.05
+price = 100.129
+settlement_days = 1
 face_value = 100.0
-bondCalendar = ql.Canada()
-day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
-
-# day_counter = ql.Actual365Fixed(ql.Actual365Fixed.Standard)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
+bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+# day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 # Setup schedule and bond
 today = datetime.date.today()
@@ -23,15 +19,7 @@ todays_date = ql.DateParser.parseFormatted(formatted_date, '%Y-%m-%d')
 print("Todays Date is: "+formatted_date)
 ql.Settings.instance().evaluationDate = todays_date
 
-
-
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/schedule.hpp
-# schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
-#                        bondCalendar , ql.Unadjusted, ql.Unadjusted,
-#                        ql.DateGeneration.Backward, False)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/businessdayconvention.hpp#L41
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/dategenerationrule.hpp#L39
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/compounding.hpp#L32
+#Schedule
 convention = ql.Unadjusted
 terminationDateConvention = ql.Unadjusted
 DateGeneration_Rule = ql.DateGeneration.Backward
@@ -39,16 +27,9 @@ endOfMonth = False
 schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
                        bondCalendar , convention , terminationDateConvention ,
                        DateGeneration_Rule, endOfMonth)
-# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bonds/fixedratebond.cpp
-# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bond.cpp#L251
+#FixedRateBond
 paymentConvention = ql.Unadjusted
 bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, paymentConvention )  #added ql.Unadjusted
-
-#debug_price = bond.dirtyPrice(coupon_rate,ql.ActualActual(ql.ActualActual.ISMA),ql.Compounded,ql.Annual)-bond.accruedAmount(todays_date)
-#print("debug_price: "+str(debug_price))
-#https://quant.stackexchange.com/questions/68450/quantlib-match-clean-price-with-bbg-clean-price
-#print(round(fixedRateBond.dirtyPrice(0.025,ql.ActualActual(ql.ActualActual.ISMA),
-#ql.Compounded,ql.Annual),6)-round(fixedRateBond.accruedAmount(ql.Date(15,10,2021)),3))
 
 # Yield to Maturity (YTM)
 clean_price = price
