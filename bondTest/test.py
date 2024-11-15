@@ -1,17 +1,17 @@
 import QuantLib as ql
 import datetime
 
-#g38
-issue_date = ql.Date(17, 11, 2014)
-end_date = ql.Date(15, 11, 2024)
-coupon_rate = 0.0225
-price = 100.185 #99.31
+#P8
+issue_date = ql.Date(30, 5, 1995)
+end_date = ql.Date(30, 5, 2025)
+coupon_rate = 0.0875
+price = 102.788
 settlement_days = 2
 face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-# day_counter = ql.Actual365Fixed(ql.Actual365Fixed.Standard)
+bondCalendar = ql.Canada()
+day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
+# day_counter = ql.Actual365Fixed(ql.Actual365Fixed.Standard)
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp

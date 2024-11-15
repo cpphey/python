@@ -59,17 +59,17 @@ import datetime
 # settlement_days = 2
 # face_value = 100.0
 # bondCalendar = ql.Canada()
-#day_counter = ql.ActualActual(ql.ActualActual.Actual365)
+# day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 #P8
 # issue_date = ql.Date(30, 5, 1995)
 # end_date = ql.Date(30, 5, 2025)
 # coupon_rate = 0.0875
 # price = 102.788
-# settlement_days = 2
+# settlement_days = 1
 # face_value = 100.0
 # bondCalendar = ql.Canada()
-#day_counter = ql.ActualActual(ql.ActualActual.Actual365)
+# day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 #p4
 # issue_date = ql.Date(28, 10, 2014)
