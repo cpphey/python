@@ -1,7 +1,8 @@
 import QuantLib as ql
 import datetime
 
-
+#https://pdfcoffee.com/bloomberg-per-security-manual-pdf-free.html
+#http://aspenres.com/bbgupgrade/bbfields.tbl
 
 #Input data
 #559665AB0
@@ -125,11 +126,11 @@ day_counter = ql.Thirty360(ql.Thirty360.USA)
 #2AS5
 issue_date = ql.Date(10,5,2017)
 end_date = ql.Date(15,3,2027)
-coupon_rate = 0.05 #0.049845
-price = 100.129
+coupon_rate = 0.05
+price = 100.458
 settlement_days = 1
 face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #VAB2
