@@ -58,8 +58,10 @@ import datetime
 # issue_date = ql.Date(5, 2, 1996)
 # end_date = ql.Date(5, 2, 2026)
 # coupon_rate = 0.0845
-# price = 106.0025
-# settlement_days = 2
+# price_mid = 105.691
+# price_high = None
+# price_low = None
+# settlement_days = 1
 # face_value = 100.0
 # bondCalendar = ql.Canada()
 # day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
@@ -183,6 +185,7 @@ settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
+custom_date =  '2024-11-20'
 
 #00817YAF
 issue_date = ql.Date(9, 6, 2006)
@@ -195,6 +198,7 @@ settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
+custom_date =  '2024-11-20'
 
 #00817YAZ
 issue_date = ql.Date(10, 8, 2017)
@@ -222,6 +226,7 @@ ql.Settings.instance().evaluationDate = todays_date
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/businessdayconvention.hpp#L41
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/dategenerationrule.hpp#L39
 #https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/compounding.hpp#L32
+# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/frequency.hpp
 schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
                        bondCalendar , ql.Following , ql.Following ,
                        ql.DateGeneration.Backward, False)
@@ -237,17 +242,20 @@ debug_price = bond.dirtyPrice(coupon_rate,ql.ActualActual(ql.ActualActual.ISMA),
 print("debug")
 
 # Yield to Maturity (YTM)
-clean_price = price
+clean_price = price_mid
 ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual) #SimpleThenCompounded
 ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)
 print(f"Yield to Maturity (YTM): {ytm * 100:.4f}%")
-
+#https://github.com/lballabio/QuantLib/blob/9cd5eab83fb7990966538c850623a8ef8e0d5b95/ql/cashflows/cashflows.cpp#L717
+# QL_REQUIRE(y.compounding() == Compounded,
+#            "compounded rate required");
 
 # Duration and Convexity
 #yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)#SimpleThenCompounded
 yield_rate = ql.InterestRate(ytm, day_counter, ql.SimpleThenCompounded, ql.Semiannual)
 
 # Calculate duration and convexity
+#https://github.com/lballabio/QuantLib/blob/9cd5eab83fb7990966538c850623a8ef8e0d5b95/test-suite/bonds.cpp#L1749
 duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
 duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
 convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100

@@ -1,18 +1,18 @@
 import QuantLib as ql
 import datetime
 
-#00206RLJ
-issue_date = ql.Date(3, 9, 2021)
-end_date = ql.Date(15, 9, 2055)
-coupon_rate = 0.0355
-price_mid = 68.748
+#00817YAZ
+issue_date = ql.Date(10, 8, 2017)
+end_date = ql.Date(15, 8, 2047)
+coupon_rate = 0.03875
+price_mid = 73.0595
 price_high = None
 price_low = None
 settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date = None #'2024-11-20'
+custom_date =  '2024-11-20'
 #day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 call_date = ql.Date(1, 5, 2023)  # Dummy call date
@@ -30,13 +30,15 @@ print("Todays Date is: "+formatted_date)
 ql.Settings.instance().evaluationDate = todays_date
 
 #Schedule
+tenor = ql.Period(ql.Semiannual)
 convention = ql.Unadjusted
 terminationDateConvention = ql.Unadjusted
 DateGeneration_Rule = ql.DateGeneration.Backward
 endOfMonth = False
-schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
+schedule = ql.Schedule(issue_date, end_date, tenor,
                        bondCalendar , convention , terminationDateConvention ,
                        DateGeneration_Rule, endOfMonth)
+
 #FixedRateBond
 paymentConvention = ql.Unadjusted
 bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, paymentConvention )  #added ql.Unadjusted
@@ -47,19 +49,20 @@ ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual) #Si
 print(f"Yield to Maturity (YTM): {ytm * 100:.8f}%")
 
 # Duration and Convexity
-#yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)#SimpleThenCompounded
-yield_rate = ql.InterestRate(ytm, day_counter, ql.CompoundedThenSimple, ql.Semiannual)
+yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)#SimpleThenCompounded
+#yield_rate = ql.InterestRate(ytm, day_counter, ql.CompoundedThenSimple, ql.Semiannual)
 
 # Calculate duration and convexity
 duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
-#duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
+#duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate.compounding(), day_counter, ql.CompoundedThenSimple,  ql.Semiannual, ql.Duration.Macaulay)
+duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
 duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
 effective_mod_duration = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified) / (1 + ytm / 2)
 effective_convexity = ql.BondFunctions.convexity(bond, yield_rate) / (1 + ytm / 2)
 convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
 
 print(f"Simple Duration: {duration_simple:.8f}")
-#print(f"Macaulay Duration: {duration_Macaulay:.8f}")
+print(f"Macaulay Duration: {duration_Macaulay:.8f}")
 print(f"Modified Duration: {duration_modified:.8f}")
 print(f"Effective Modified Duration: {effective_mod_duration:.8f}")
 print(f"Effective Convexity: {effective_convexity:.8f}")
