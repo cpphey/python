@@ -46,8 +46,10 @@ import datetime
 # issue_date = ql.Date(31, 12, 2008)
 # end_date = ql.Date(1, 11, 2031)
 # coupon_rate = 0.08
-# price = 111.302
-# settlement_days = 2
+# price_mid = 111.361
+# price_high = 99.704
+# price_low = 99.704
+# settlement_days = 1
 # face_value = 100.0
 # bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
@@ -104,48 +106,107 @@ import datetime
 # day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #1AH2
-issue_date = ql.Date(28,4,2016)
-end_date = ql.Date(15,4,2026)
-coupon_rate = 0.05375
-price = 100.0115
-settlement_days = 1
-face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
+# issue_date = ql.Date(28,4,2016)
+# end_date = ql.Date(15,4,2026)
+# coupon_rate = 0.05375
+# price = 100.0115
+# settlement_days = 1
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #GAE3
-issue_date = ql.Date(11,3,2014)
-end_date = ql.Date(15,3,2044)
-coupon_rate = 0.05375
-price = 93.117
-settlement_days = 1
-face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
+# issue_date = ql.Date(11,3,2014)
+# end_date = ql.Date(15,3,2044)
+# coupon_rate = 0.05375
+# price = 93.117
+# settlement_days = 1
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 #2AS5
-issue_date = ql.Date(10,5,2017)
-end_date = ql.Date(15,3,2027)
-coupon_rate = 0.05
-price = 100.458
+# issue_date = ql.Date(10,5,2017)
+# end_date = ql.Date(15,3,2027)
+# coupon_rate = 0.05
+# price = 100.458
+# settlement_days = 1
+# face_value = 100.0
+# bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#VAB2
+# issue_date = ql.Date(8,2,2017)
+# end_date = ql.Date(15,8,2026)
+# coupon_rate = 0.05125
+# price = 99.9125
+# settlement_days = 1
+# face_value = 100.0
+# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+# day_counter = ql.Thirty360(ql.Thirty360.USA)
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
+#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
+
+#00206RLJ
+issue_date = ql.Date(3, 9, 2021)
+end_date = ql.Date(15, 9, 2055)
+coupon_rate = 0.0355
+price_mid = 68.581
+price_high = None
+price_low = None
 settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
 
-#VAB2
-issue_date = ql.Date(8,2,2017)
-end_date = ql.Date(15,8,2026)
-coupon_rate = 0.05125
-price = 99.9125
+#002824BG
+issue_date = ql.Date(22, 11, 2016)
+end_date = ql.Date(30, 11, 2036)
+coupon_rate = 0.0475
+price_mid = 97.2848
+price_high = None
+price_low = None
 settlement_days = 1
 face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
 
+#00440EAW
+issue_date = ql.Date(3, 11, 2015)
+end_date = ql.Date(3, 11, 2045)
+coupon_rate = 0.0435
+price_mid = 86.5435
+price_high = None
+price_low = None
+settlement_days = 1
+face_value = 100.0
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#00817YAF
+issue_date = ql.Date(9, 6, 2006)
+end_date = ql.Date(15, 6, 2036)
+coupon_rate = 0.06625
+price_mid = 107.1281
+price_high = None
+price_low = None
+settlement_days = 1
+face_value = 100.0
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+#00817YAZ
+issue_date = ql.Date(10, 8, 2017)
+end_date = ql.Date(15, 8, 2047)
+coupon_rate = 0.03875
+price_mid = 73.0595
+price_high = None
+price_low = None
+settlement_days = 1
+face_value = 100.0
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
 
 # Setup schedule and bond
 today = datetime.date.today()

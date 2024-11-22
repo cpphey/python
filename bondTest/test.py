@@ -1,17 +1,19 @@
 import QuantLib as ql
 import datetime
 
-#p4
-issue_date = ql.Date(28, 10, 2014)
-end_date = ql.Date(1, 5, 2025)
-coupon_rate = 0.05
-price_mid = 99.704
-price_high = 99.704
-price_low = 99.704
-settlement_days = 0
+#00817YAZ
+issue_date = ql.Date(10, 8, 2017)
+end_date = ql.Date(15, 8, 2047)
+coupon_rate = 0.03875
+price_mid = 73.0595
+price_high = None
+price_low = None
+settlement_days = 1
 face_value = 100.0
-bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
+
+custom_date = '2024-11-20'
 #day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 call_date = ql.Date(1, 5, 2023)  # Dummy call date
@@ -22,7 +24,6 @@ benchmark_yield = 0.03  # Dummy benchmark yield of 3%
 
 
 # Setup schedule and bond
-custom_date = None #'2024-11-18'
 today = datetime.date.today()
 formatted_date = today.strftime('%Y-%m-%d') if custom_date is None else custom_date
 todays_date = ql.DateParser.parseFormatted(formatted_date, '%Y-%m-%d')
@@ -52,12 +53,14 @@ yield_rate = ql.InterestRate(ytm, day_counter, ql.CompoundedThenSimple, ql.Semia
 
 # Calculate duration and convexity
 duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
+#duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
 duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
 effective_mod_duration = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified) / (1 + ytm / 2)
 effective_convexity = ql.BondFunctions.convexity(bond, yield_rate) / (1 + ytm / 2)
 convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
 
 print(f"Simple Duration: {duration_simple:.8f}")
+#print(f"Macaulay Duration: {duration_Macaulay:.8f}")
 print(f"Modified Duration: {duration_modified:.8f}")
 print(f"Effective Modified Duration: {effective_mod_duration:.8f}")
 print(f"Effective Convexity: {effective_convexity:.8f}")
@@ -69,7 +72,7 @@ print(f"Effective Yield (using QuantLib): {effective_rate * 100:.8f}%")
 
 # Yield to Call (YTC) with Dummy Numbers
 ytc = bond.bondYield(call_price, day_counter, ql.Compounded, ql.Semiannual, call_date)
-print(f"Yield to Call (YTC) on {call_date}: {ytc * 100:.8f}%")
+print(f"Yield to Call with dummy (YTC) on {call_date}: {ytc * 100:.8f}%")
 
 # Yield to Worst (YTW) with Dummy Numbers
 ytw = min(ytm, ytc)  # Yield to worst is the minimum of YTM and YTC
