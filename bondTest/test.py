@@ -5,12 +5,21 @@ import datetime
 issue_date = ql.Date(28, 10, 2014)
 end_date = ql.Date(1, 5, 2025)
 coupon_rate = 0.05
-price = 99.704
+price_mid = 99.704
+price_high = 99.704
+price_low = 99.704
 settlement_days = 0
 face_value = 100.0
 bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
-#day_counter  = ql.ActualActual(ql.ActualActual.ISMA)@al
+#day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
+
+call_date = ql.Date(1, 5, 2023)  # Dummy call date
+call_price = 100.0  # Call price_mid at par
+spread = 0.01  # Dummy credit spread of 1%
+shock_size = 0.01  # Dummy interest rate shock of 1%
+benchmark_yield = 0.03  # Dummy benchmark yield of 3%
+
 
 # Setup schedule and bond
 custom_date = None #'2024-11-18'
@@ -33,7 +42,7 @@ paymentConvention = ql.Unadjusted
 bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, paymentConvention )  #added ql.Unadjusted
 
 # Yield to Maturity (YTM)
-clean_price = price
+clean_price = price_mid
 ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual) #SimpleThenCompounded
 print(f"Yield to Maturity (YTM): {ytm * 100:.8f}%")
 
@@ -59,8 +68,6 @@ effective_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)
 print(f"Effective Yield (using QuantLib): {effective_rate * 100:.8f}%")
 
 # Yield to Call (YTC) with Dummy Numbers
-call_date = ql.Date(1, 5, 2023)  # Dummy call date
-call_price = 100.0  # Call price at par
 ytc = bond.bondYield(call_price, day_counter, ql.Compounded, ql.Semiannual, call_date)
 print(f"Yield to Call (YTC) on {call_date}: {ytc * 100:.8f}%")
 
@@ -69,19 +76,16 @@ ytw = min(ytm, ytc)  # Yield to worst is the minimum of YTM and YTC
 print(f"Yield to Worst (YTW): {ytw * 100:.8f}%")
 
 # Credit Duration with Dummy Numbers
-spread = 0.01  # Dummy credit spread of 1%
 yield_rate_with_spread = ql.InterestRate(ytm + spread, day_counter, ql.Compounded, ql.Semiannual)
 credit_duration = ql.BondFunctions.duration(bond, yield_rate_with_spread, ql.Duration.Modified)
 print(f"Credit Duration (with dummy spread of {spread * 100:.2f}%): {credit_duration:.8f}")
 
 # Delta with Dummy Numbers
-shock_size = 0.01  # Dummy interest rate shock of 1%
 yield_rate_shocked = ql.InterestRate(ytm + shock_size, day_counter, ql.Compounded, ql.Semiannual)
 delta = (ql.BondFunctions.cleanPrice(bond, yield_rate_shocked) - ql.BondFunctions.cleanPrice(bond, yield_rate)) / shock_size
 print(f"Delta (with dummy shock of {shock_size * 100:.2f}%): {delta:.8f}")
 
 # Spread to Curve with Dummy Numbers
-benchmark_yield = 0.03  # Dummy benchmark yield of 3%
 spread_to_curve = ytm - benchmark_yield
 print(f"Spread to Curve (with dummy benchmark yield of {benchmark_yield * 100:.2f}%): {spread_to_curve * 100:.8f}%")
 
