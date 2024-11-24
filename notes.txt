@@ -1,0 +1,904 @@
+----------------------------------------------
+Alt+Sysrq for memory issues
+----------------------------------------------
+----You have to enable it---
+# /etc/sysctl.d/10-magic-sysrq.conf
+kernel.sysrq = 1
+
+reboot OR sudo sysctl --system
+
+----You can use it by---
+Alt+Sysrq+F 
+Sysrq is basically the Print Screen key
+
+https://ubuntu.com/blog/prepare-for-when-ubuntu-freezes#:~:text=Press%20and%20hold%20alt,Press%20f
+
+
+sync; echo 1 > /proc/sys/vm/drop_caches
+sync; echo 2 > /proc/sys/vm/drop_caches
+sync; echo 3 > /proc/sys/vm/drop_caches
+swapoff -a && swapon -a
+
+https://www.tecmint.com/clear-ram-memory-cache-buffer-and-swap-space-on-linux/
+
+
+----------------------------------------------
+Webcam 
+---------------------------------------------
+guvcview
+The 4k camera has a microphone too which you have to MANUALLY shut off. As alsamixer command not working.
+
+----------------------------------------------
+Counterstrike issues
+---------------------------------------------
+Issue says display server cannot connect
+
+
+Ctrl+F3 for console.
+restart gnome-shell Alt+F2 , then type r 
+Load and unload X server
+modprobe 
+sudo rmmod nvidia
+sudo modprobe nvidia
+
+CTRL + SHIFT + PrtScn -- for screenshot
+
+Put options in gui to start 
+-novid -nojoy -fullscreen
+https://github.com/ValveSoftware/csgo-osx-linux/issues/2659
+
+Other ones
+-windowed -autoconfig
+-novid -nojoy -fullscreen
+-console -novid -nojoy -high
+
+https://80.lv/articles/you-can-still-play-counter-strike-global-offensive-instead-of-cs2/
+Install Counter-Strike 2 on Steam.
+Right-click on Counter-Strike 2 in your Steam library and open its Properties.
+In the Betas tab, select "csgo_legacy: Legacy Version of CS:GO" in the dropdown menu.
+
+As you might have guessed, this way you'll get a limited, frozen build of the game, without official matchmaking, the support for which ends on January 1, 2024. After the date, the game will still be available, "but certain functionality that relies on compatibility with the Game Coordinator (e.g., access to inventory) may degrade and/or fail," says Valve.
+
+https://github.com/ValveSoftware/csgo-osx-linux/issues/3291
+/home/amazon/.steam/debian-installation/steam.sh -nobreakpad
+
+vulkan
+https://github.com/ValveSoftware/csgo-osx-linux/issues/3363
+steam settings > download > disable shader 
+
+TRICK - reinstall counterstrike go sometimes
+----------------------------------------------
+Chrome Dark mode
+---------------------------------------------
+
+chrome://flags/#enable-force-dark
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome2_user/ --new-window
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome3_user/ --new-window
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome4_user/ --new-window
+
+
+----------------------------------------------
+Windows Audio Issue
+---------------------------------------------
+Speaker Properties --- Disable enhancement etc...
+
+----------------------------------------------
+Aptitude
+---------------------------------------------
+https://askubuntu.com/questions/1120810/packages-have-unmet-dependencies
+
+https://askubuntu.com/questions/1120810/packages-have-unmet-dependencies
+
+----------------------------------------------
+Microphone
+---------------------------------------------
+https://askubuntu.com/questions/12100/command-to-mute-and-unmute-a-microphone
+
+You can mute the microphone with : amixer set Capture nocap
+and unmute the microphone with : amixer set Capture cap
+
+Does NOT work : amixer set Mic toggle
+
+https://askubuntu.com/questions/1029606/how-can-i-disable-a-built-in-microphone
+pavucontrol
+alsamixer
+
+----------------------------------------------
+Toggle taksbar not displayed
+---------------------------------------------
+Gnome Tweaks -> Extensions -> "dash to dock" toggle
+
+----------------------------------------------
+Brightness of secondary monitor
+---------------------------------------------
+https://askubuntu.com/questions/894465/changing-the-screen-brightness-of-the-external-screen
+xrandr -q 
+/Software solutoin for brightness
+xrandr --output HDMI-1-2 --brightness 0.5
+
+/refresh rate
+xrandr --output HDMI-1-2 --refresh1 60
+
+xrandr -d :1 --output DP-1-1 --auto
+
+/RIGHT  WAY --- hardware solution for brightness; resolution
+pkexec gddccontrol
+
+----------------------------------------------
+Citrix	
+---------------------------------------------
+Comes in linux also
+
+In full screen Alt+Tab should work : https://support.citrix.com/help/receiver/3/win/en/Content/ica-xd-factors-affecting-keyboards.html
+
+Registry entry for Alt+Tab not working : https://support.citrix.com/article/CTX232298
+
+Max resolution in EITHER side is 4096 : https://support.citrix.com/article/CTX201696
+
+----------------------------------------------
+Status bar logo on top of clock
+---------------------------------------------
+
+https://askubuntu.com/questions/1263833/how-can-i-remove-icon-covering-clock-in-gnome-shell-top-bar
+https://extensions.gnome.org/extension/355/status-area-horizontal-spacing/
+
+-----------------------
+Fonts / Keyboard layout
+----------------------
+Shit + super (windows key) + space 
+same as top right on bar to switch languages
+
+Installed gogole noto on ~/.fonts and followed steps https://www.google.com/get/noto/help/install/
+
+However the following problem remains:
+https://unix.stackexchange.com/questions/245116/devanagari-combined-words-are-not-displaying-correctly
+
+
+-----------------------
+Reset icon size
+----------------------
+
+Just toggle this
+Its called "Application Picker" on windows manager "gnome-shell"
+https://extensions.gnome.org/extension/302/windowoverlay-icons/
+
+-----------------------
+CamShop
+----------------------
+ICODIS and VIISAN products same
+https://www.viisan.com/en/product/V8.html
+https://www.projecticodis.com/collections/document-scanner
+
+Driver is NOT at both places:
+C:\Program Files (x86)\CamDS
+C:\Program Files (x86)\CamShop
+
+
+https://www.viisan.com/en/product/V8.html
+
+https://askubuntu.com/questions/377778/how-to-add-users-to-vboxusers
+https://unix.stackexchange.com/questions/129305/how-can-i-enable-access-to-usb-devices-within-virtualbox-guests
+
+/home/amazon/.wine/drive_c/Program Files (x86)/CamShop
+
+Bus 001 Device 016: ID 0c45:0810 Microdia 
+
+
+The following NEW packages will be installed:
+  input-utils
+The following packages will be REMOVED:
+  libgsoap-2.8.60{u} libvncserver1{u} virtualbox-dkms{u}
+0 packages upgraded, 1 newly installed, 3 to remove and 156 not upgraded.
+
+
+
+Missing after unplug:
+lsusb
+
+Bus 001 Device 010: ID 0c45:0810 Microdia
+Bus 001 Device 009: ID 1a40:0101 Terminus Technology Inc. Hub
+
+
+VBoxManage list usbhost | grep Manufa
+Manufacturer:       Sonix Technology Co., Ltd.
+
+TRICK: Its the Sonix one on Virtualbox
+
+-----------------------
+Linux reduce pdf size
+----------------------
+
+https://askubuntu.com/questions/743446/reduce-size-of-printed-to-pdf-files
+
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen \
+-dNOPAUSE -dQUIET -dBATCH -sOutputFile=out.pdf in.pdf
+
+-----------------------
+ADB Android Debug
+-----------------------
+adb pull /mnt/sdcard/Download/flat.pdf .
+adb pull /storage/1950-5543 .
+adb pull /storage/emulated/0 .
+
+Firestick ADB https://developer.amazon.com/docs/fire-app-builder/connecting-adb-to-fire-tv.html
+adb connect fire_stick_ip:5555
+
+-----------------------
+KDEConnect
+-----------------------
+KDEConnect is what you use.
+GSConnect is a complete implementation of the KDE Connect spec, so you do not need to have both.
+
+https://www.reddit.com/r/gnome/comments/d1iwsn/kde_connect_vs_gsconnect_on_gnome/
+https://www.linuxbabe.com/ubuntu/install-kde-connect-ubuntu-16-04
+
+
+-----------------------
+vnc
+-----------------------
+dconf-editor for gnome settings graphically
+
+https://bugs.launchpad.net/ubuntu/+source/vino/+bug/1775999
+Install dconf-editor then open it and go to org-gnome-desktop-remote access and turn off encryption. 
+
+/usr/lib/vino/vino-server
+
+-----------------------
+large log files
+----------------------
+
+/var/log
+sed -i '1,100d' logfilename / change 100 to line number to delete
+
+
+
+logrotate picksup changes daily via /etc/cron.daily 
+
+
+https://askubuntu.com/questions/515146/very-large-log-files-what-should-i-do
+
+https://www.folkstalk.com/2013/03/sed-remove-lines-file-unix-examples.html
+
+https://unix.stackexchange.com/questions/116136/how-to-make-log-rotate-change-take-effect/116138
+
+-----------------------
+sound
+-----------------------
+
+pulseaudio -k && sudo alsa force-reload
+vbox ; virtualbox ; use pulseaudio for microphone to work 
+-----------------------
+md5deep
+------------------------
+
+md5deep  -l -r IMMG > full_immg 
+
+cd dir2
+
+md5deep  -l -M ../full_immg -n -r IMMG 
+
+http://md5deep.sourceforge.net/md5deep.html
+
+
+------------------------
+
+gufw
+
+msi keybord color light FN key and Plus key of keypad  / Minus key of keypad
+
+-----------------------
+temp_throttle
+------------------------
+/home/amazon/Downloads/temp-throttle-stable/temp_throttle.sh 80 > "/home/amazon/Downloads/temp_throttle_log_`date +'%Y-%m-%d-%H-%M-%S'`.txt" 2>&1 &
+https://github.com/Sepero/temp-throttle
+
+-----------------------
+Firewall
+------------------------
+Firewall is ufw and gufw
+
+-----------------------
+mouse share
+------------------------
+export DISABLE_WAYLAND=1
+
+------------------------
+Q:download opra date
+A:
+Time-sales
+
+Q:
+historical charts
+A:
+
+--------------------------------------
+STARTUP
+--------------------------------------
+/etc/rc.local has script
+only use gnome with XORG --- so it can use nvidia drivers
+This also is keeping the computer much more cooler
+Go to Software & updates -> Additional Drivers and choose nvidia
+do sensors and psensor to see nvidia temp
+nvidia-settings cmdline and gui will show nvidia card
+--------------------------------------
+
+https://www.linuxbabe.com/ubuntu/install-nvidia-driver-ubuntu-18-04#:~:text=If%20you%20want%20Ubuntu%20to,select%20NVIDIA%20in%20PRIME%20Profiles%20.
+Go to "Software and Update" to select Nvidia on startup
+
+-------------------
+DD Command
+-------------------
+sudo dd if=/dev/zero iflag=fullblock oflag=direct | pv -s 128G -S | sudo dd of=/dev/sdb bs=5G
+
+--------------------
+ENCRYPT/DECRYPT
+--------------------
+
+find 1 -type f -exec ls {} \;
+
+
+--Make copy of JUST directories
+find 1 -type d -exec mkdir -p /home/amazon/Downloads/enc/6/{} \;
+https://unix.stackexchange.com/questions/178466/how-do-i-deal-with-directories-that-have-spaces-in-their-names-from-find
+find . -type d -print0 | while read -d '' -r dir; do mkdir -p "/media/new_ext4_partition/docc/$dir"; done
+
+--1 file encrypt
+gpg --passphrase-file /home/amazon/Downloads/enc/pass --batch --yes --output /home/amazon/Downloads/dd.txt  -c a.txt 
+
+--full directory encrypt
+find dirname -type f -exec gpg --passphrase-file /home/amazon/Downloads/enc/pass --batch --yes --output /home/amazon/Downloads/enc/6/{}.gpg -c {} \;
+
+--decrypt
+gpg -d filename
+
+--PLEASE RUN THE following to delete the passwords
+rm -fr ~/.gnupg
+
+###################################
+diff <(find /media/new_ext4_partition/privileged_info/ -type f | sed -e 's/\/media\/new_ext4_partition\/privileged_info\///g' | sed -e 's/\.gpg$//g' | sort) <(find ~/Documents/privileged_info/ -type f | sed -e 's/\/home\/amazon\/Documents\/privileged_info\///g' | sort)  | grep -ivP '^\d'  |wc -l
+
+join -v2 
+
+Delete line which already exist in output folders
+g/^> /d
+
+Delete the begn < with vim Caps Ctrl
+
+Delete the seperator
+g/---/d
+
+-Escaping outside of a.sh in command file only
+-Escape whitespace $  inside a.sh others outside because whitespace hard to escape in command file
+NO need of !
+%s/ /\\ /g
+%s/'/\\'/g
+%s/(/\\(/g
+%s/)/\\)/g
+%s/;/\\;/g
+%s/&/\\&/g
+%s/`/\\`/g
+%s/\$/\\\$/g
+
+%s/\$/\\$/g --- not needed
+-begn and end of line
+%s/$/\.gpg/g
+%s/^/ -d \/media\/new_ext4_partition\//g
+
+%s/^/\/usr\/bin\/gpg --passphrase-file \/home\/amazon\/Downloads\/enc\/pass --batch --yes --output \/home\/amazon\/Documents\//g
+
+https://www.baeldung.com/linux/merge-files-line-by-line
+paste left.text right.text
+
+
+for a in `cat missing2 | head -1`; do a.sh "$a"; done
+
+--copy files
+rsync -avt --progress --update --append-verify /media/new_ext4_partition/privileged_info/immg_july_2022 /media/amazon/013B-7AAD/privileged_info  > copy_log 2>&1 &
+
+-------------------------
+a.sh
+-------------------------
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/amazon/Downloads/pycharm-community-2019.3.1/bin:/home/amazon/eclipse:/home/amazon/anaconda3/bin:/home/amazon/Downloads/pycharm-community-2019.3.1/bin:/home/amazon/eclipse:/home/amazon/anaconda3/bin:.
+
+#find /media/new_ext4_partition/privileged_info/ -type f -exec a.sh {} \; ^C
+#Putting double quotes around variables preserves two spaces etc; technical word is field splitting
+#https://unix.stackexchange.com/questions/273660/how-do-i-echo-a-string-with-multiple-spaces-in-bash-untouched
+
+#special characters need to be escaped ` ' ! $ _ ~ ( ) ;  whitespace &
+AA=$(echo "$1"|sed -s 's/\/media\/new_ext4_partition\/privileged_info\///g'|sed -s 's/\.gpg$//g'|sed -s 's/`/\\`/g'|sed -s 's/\$/\\$/g'|sed -s 's/_/\\_/g'|sed -s 's/~/\\~/g'|sed -s 's/!/\\!/g')
+CMD="/usr/bin/gpg --passphrase-file /home/amazon/Downloads/enc/pass --batch --yes --output \"/home/amazon/Documents/privileged_info/""$AA""\" -d \"""$1""\""
+echo "$CMD" >> nohup_out.log 2>&1 &
+#/usr/bin/nohup "$CMD" >> nohup_out.log 2>&1 &
+#eval "$CMD"
+#gpg --passphrase-file /home/amazon/Downloads/enc/pass --batch --yes --output "/home/amazon/Documents/privileged_info/$AA" -d "$1"
+------------------
+TODO
+------------------
+compare all files
+rename files
+1. delete pass and gnupg from enc_immg/IMMG AND IMMG
+remove .gnupg
+2. remove gpg from unenc files
+
+
+-----------------
+MISSING
+-----------------
+
+enc_immg/IMMG/immg_collection/._.DS_Store
+enc_immg/IMMG/immg_collection/.DS_Store
+gpg: no valid OpenPGP data found.
+ONLY for these 2 files
+--- basically nothing was missing -- 2 files
+
+vimdiff files_unenc_before_renaming files_after_renaming
+--- nothing was missing
+
+----------------------------------
+NEED FOR SPEED LUTRIS
+-----------------------------------
+
+Ingame option in origin is unchecked
+
+Log:
+~/Downloads/Games/need-for-speed-2015/drive_c/users/amazon/Local\ Settings/Application\ Data/Origin/Logs/Client_Log.txt
+
+
+Alt+Tab for window mode
+backspace for settings
+home/end for moving in settings
+pag up/down for prior/nextG for car shut down
+e/q for gear
+
+----------------------------------------------
+Dash to dock icon size
+---------------------------------------------
+
+https://askubuntu.com/questions/1290260/how-to-set-the-ubuntu-dock-icon-size-to-less-then-16
+Install dconf editor from software center.
+open it and go to org/gnome/shell/extensions/dash-to-dock/.
+There you will find dash-max-icon-size.
+
+example:
+gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 12
+
+
+dconf editor
+
+
+----------------------------------------------
+Bixby apps
+---------------------------------------------
+
+pm disable-user --user 0 com.samsung.android.bixby.service
+pm disable-user --user 0 com.samsung.android.visionintelligence
+pm disable-user --user 0 com.samsung.android.bixby.agent
+pm disable-user --user 0 com.samsung.android.bixby.agent.dummy
+pm disable-user --user 0 com.samsung.android.app.settings.bixby
+pm disable-user --user 0 com.samsung.systemui.bixby2
+pm disable-user --user 0 com.samsung.android.bixby.wakeup
+
+
+
+----------------------------------------------
+Screen issues
+---------------------------------------------
+Run this in the while loop
+while true; do sleep 5 ; xset dpms force off; done
+
+https://askubuntu.com/questions/1408394/my-screen-goes-black-after-30-seconds-of-inactivity-in-ubuntu-22-04
+xset -dpms
+
+xrandr --output eDP-1-1 --brightness 0.5 <--- does not help  
+xrandr --output eDP-1-1 --brightness 0.2
+
+xrandr --output eDP-1-1 --brightness 1.0 and then adjust using the display driver
+
+----------------------------------------------
+Adding Resolution
+---------------------------------------------
+#Worked
+xrandr --output HDMI-1-2 --mode 2560x1440 --rate 59.95
+xrandr --output HDMI-1-1 --mode 2560x1440 --rate 59.95
+xrandr --output HDMI-1-2 --mode 3840x2160 --rate 30
+
+xrandr --addmode HDMI-1-2  3840x2160
+xrandr --output HDMI-1-2 --mode 3840x2160 --rate 30 
+xrandr --output HDMI-1-1 --mode 3840x2160 --rate 30
+
+xrandr --output HDMI-1-1 --mode 1920x1080 --rate 60 
+xrandr --output HDMI-1-2 --mode 1920x1080 --rate 60
+
+xrandr --output HDMI-1-2 --rotate right 
+
+#Tips--did not use
+cvt 2560 1440 59.95
+cvt 3840 2160 30
+
+https://forum.level1techs.com/t/how-do-i-add-a-screen-resolution-without-setting-it/111862/5
+adminz@adminz-System-Product-Name ~ $ xrandr --newmode "3840x1080" 345.60 3840 4080 4496 5152 1080 1081 1084 1118 -HSync +Vsync
+adminz@adminz-System-Product-Name ~ $ xrandr --addmode HDMI2 3840x1080
+adminz@adminz-System-Product-Name ~ $ xrandr --output HDMI2 --mode 3840x1080 --rate 60
+
+#Convinient Scripts
+sleep 5; xrandr --output HDMI-1-2 --mode 3840x2160 --rate 30 ; xrandr --output HDMI-1-1 --mode 3840x2160 --rate 30; xrandr --output HDMI-1-1 --rotate left
+
+sleep 5; xrandr --output HDMI-1-1 --mode 1920x1080 --rate 60 ; xrandr --output HDMI-1-2 --mode 1920x1080 --rate 60; xrandr --output HDMI-1-1 --rotate normal ; xrandr --output HDMI-1-2 --rotate normal
+
+----------------------------------------------
+Gnome shell
+---------------------------------------------
+If UI gnome acts strange , do gnome-shell --restart
+
+
+-----------------------------------------------
+Combination for stuck frozen kill
+-----------------------------------------------
+
+alt+sysrq+f
+https://askubuntu.com/questions/1196857/the-altsysrqf-combination-dont-work-for-kill-the-task-taking-most-memory
+
+alt+sysrq+reisub
+https://askubuntu.com/questions/95192/what-is-the-equivalent-of-control-alt-delete
+
+-----------------------------------------------
+Mouse
+-----------------------------------------------
+
+https://github.com/libratbag/libratbag/tree/master/data/devices
+https://www.reddit.com/r/linux_gaming/comments/qxfbsd/razer_mouse_on_linux_gaming_mice_and_linux/
+https://github.com/libratbag/piper
+
+https://openrazer.github.io/#features
+https://polychromatic.app/download/ubuntu/
+
+-----------------------------------------------
+Skype webcam and mic
+-----------------------------------------------
+Do not run anything using web and mic like zoom
+https://askubuntu.com/questions/1222542/skypeforlinux-recognises-external-webcam-but-gives-black-screen
+Launch it like below
+LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libv4lconvert.so skypeforlinux
+
+-----------------------------------------------
+CUT VIDEO EDIT 
+-----------------------------------------------
+https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video
+ffmpeg -ss 00:00:00.0 -i INPUT.mp4 -c copy -t 00:52:00.0 OUTPUT.mp4
+
+
+----------------------------------------------
+gnome-shell dock
+----------------------------------------------
+https://extensions.gnome.org/extension/19/user-themes/
+extension manager
+gsettings set org.gnome.shell development-tools true
+apt-get install ubuntu-desktop gnome-tweaks gnome-shell-extension-manager gnome-shell-extensions
+1. Commented out lines here in all files /etc/dconf/db/local.d/locks/
+2. Update using sudo dconf update . https://help.gnome.org/admin/system-admin-guide/stable/dconf-lockdown.html.en
+
+
+
+apt-get install make cmake gcc libelf-dev g++
+restarted 2 servs including xrdp and another one.
+https://communities.vmware.com/t5/Horizon-for-Linux/Horizon-Agent-install-with-USB-redirect-and-DKMS/td-p/2899373
+
+https://askubuntu.com/questions/1478331/gnome-shell-42-9-wont-show-looking-glass?noredirect=1#comment2589265_1478331
+https://extensions.gnome.org/extension/307/dash-to-dock/
+sudo apt install gnome-shell-extension-manager
+
+Alt+F2 for gnome command and then press 'r'
+
+Tools:
+extension manager from gui
+dconf editor
+gnome tweak tool from gui
+
+----------------------------------------------
+Ubuntu 20.04 and 22.04 LTS jammy focal upgrade
+----------------------------------------------
+Had to go through 18.04->20.04->22.04  (Could not skip 20.04)
+Names are bionic->focal->jammy
+
+apt.log and main.log /var/log/dist-upgrade
+removed investigating ones too in the 
+https://askubuntu.com/questions/1285778/what-should-i-do-with-no-candidate-ver-packages-when-upgrading-ubuntu
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT_STYLE=menu
+other options are countdown and hidden
+https://askubuntu.com/questions/1083904/how-can-i-display-the-grub-during-boot
+sudo efibootmgr ON https://superuser.com/questions/1247300/how-to-make-uefi-bios-start-grub-not-windows
+
+sudo dpkg -l | grep ^r | awk '{print $2}' | tr -s '\n' ' '
+
+Filesystem issues
+lsblk
+
+----------------------------------------------
+Remmina rdp
+----------------------------------------------
+To readjust screen to host resolution you are using the dynamic resolution button. To do this, MAXIMIZE window on host and then enter your username and password. 
+This way you do it BEFORE the desktop shows up.
+
+xfreerdp /u:username /p:password /v:ip_address
+xfreerdp /u:abhinav2 /p:CrappyPass2023 /v:34.74.40.163 
+
+
+xfreerdp /sec:rdp /f /multimon:force /gdi:hw /v:servername
+if i add this option -max-loop-time:1000 it´s better.
+
+xfreerdp -max-loop-time:1000 /sec:rdp /f /multimon:force /gdi:hw /v:servername
+xfreerdp -max-loop-time:1000  /v:34.74.40.163 
+
+rdesktop   34.74.40.163 
+
+xfreerdp  /bpp:32 /bitmap-cache /glyph-cache +compression /size:1920x1080 /v:34.74.40.163 
+
+https://linux.how2shout.com/4-ways-to-install-remmina-on-ubuntu-22-04-lts-jammy-jellyfish/#4_How_to_update_Remmina
+sudo snap install remmina
+sudo snap refresh remmina
+
+
+sudo snap connect remmina:audio-record :audio-record
+sudo snap connect remmina:avahi-observe :avahi-observe
+sudo snap connect remmina:cups-control :cups-control
+sudo snap connect remmina:mount-observe :mount-observe
+sudo snap connect remmina:password-manager-service :password-manager-service
+sudo snap connect remmina:ssh-keys :ssh-keys
+sudo snap connect remmina:ssh-public-keys :ssh-public-keys
+https://adamtheautomator.com/remmina-on-ubuntu/
+
+Remmina Resolution
+https://www.reddit.com/r/Remmina/comments/ii3zl1/force_remote_desktop_resolution_with_rdp/
+
+----------------------------------------------
+gcc build
+----------------------------------------------
+https://stackoverflow.com/questions/9253695/building-gcc-requires-gmp-4-2-mpfr-2-3-1-and-mpc-0-8-0
+./contrib/download_prerequisites
+
+https://stackoverflow.com/questions/24325754/gcc-installation-error
+sudo apt-get install gcc-multilib
+
+sudo apt-get install flex bison
+
+remove files
+https://www.mail-archive.com/gcc@gcc.gnu.org/msg67032.html
+
+
+//---git clone https://github.com/westes/flex
+sudo apt-get install libtool
+sudo apt-get install autopoint
+//---./autogen.sh
+//---./configure
+make
+sudo make install
+
+https://stackoverflow.com/questions/51062293/how-do-i-build-into-a-specified-directory-using-the-prefix-option-of-configure
+
+amazon@amazon-comp: Mon Jul 31 07:33:39 /media/new_ext4_partition/gcc/gcc $make
+amazon@amazon-comp: Mon Jul 31 12:51:25 /media/new_ext4_partition/gcc/gcc $
+amazon@amazon-comp: Mon Jul 31 14:36:03 /media/new_ext4_partition/gcc/gcc $make install
+
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /media/new_ext4_partition/sw/common/libexec/gcc/x86_64-pc-linux-gnu/14.2.0
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /media/new_ext4_partition/sw/common/lib/../lib32
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /media/new_ext4_partition/sw/common/lib/../lib64
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+
+
+
+---GLIBC----
+/media/new_ext4_partition/glibc/
+
+mkdir -p build stage prefix exec-prefix
+cd build
+../configure --prefix=/media/new_ext4_partition/sw/glibc/prefix --exec-prefix=/media/new_ext4_partition/sw/glibc/exec-prefix/ 
+make
+
+ABI - application binary interface
+https://stackoverflow.com/questions/65349875/where-can-i-find-glibcxx-3-4-29
+gcc with glibc and cxxabi version
+
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu
+export LD_LIBRARY_PATH=/media/new_ext4_partition/sw/glibc/build
+
+libtool: warning: remember to run 'libtool --finish /usr/local/lib'
+
+
+https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
+make install DESTDIR=/media/new_ext4_partition/sw/install/glibc
+
+libX11.so.6
+libstdc++.so.6
+---------------------------------
+binutils->autogen->guile->libunistring
+
+
+export PATH=/media/new_ext4_partition/sw/install/glibc:$PATH
+export LD_LIBRARY_PATH=/media/new_ext4_partition/sw/install/glibc:$LD_LIBRARY_PATH
+./configure 
+
+
+
+----------------------------------------------
+GLIBC C++ compile issue
+----------------------------------------------
+https://stackoverflow.com/questions/76974555/glibcxx-3-4-32-not-found-error-at-runtime-gcc-13-2-0
+File is /usr/local/lib64/libstdc++.so.6
+export LD_LIBRARY_PATH=/usr/local/lib64/
+
+----------------------------------------------
+how can I kill a specific X window
+----------------------------------------------
+
+https://askubuntu.com/questions/833303/how-can-i-kill-a-specific-x-window
+wmctrl -lp /list windows
+wmctrl -ic window id
+
+----------------------------------------------
+chromium browser
+----------------------------------------------
+gtk-launch chromium-browser1.desktop
+
+
+
+----------------------------------------------
+qemu kvm virtual
+----------------------------------------------
+https://forums.virtualbox.org/viewtopic.php?f=2&t=105483
+VBoxManage setextradata "win" VBoxInternal/RamPreAlloc 1
+#This did not work
+
+#Harddrive win.vdi becomes win.img
+https://www.reddit.com/r/linuxquestions/comments/8fbrj6/does_qemu_support_vdi_disk_images/
+qemu-img convert -f vdi -O raw ~/"VirtualBox VMs"/OldMachine/OldMachine.vdi NewMachine.img
+qemu-img convert -f vdi -O raw /media/windows/VirtualBoxVMs/win/win.vdi win.img
+
+https://askubuntu.com/questions/345218/virt-manager-cant-connect-to-libvirt
+newgrp libvirt
+
+https://askubuntu.com/questions/1375027/copy-paste-does-not-work-between-host-and-guest-ubuntu-spice-installed
+	
+
+selected 2 cpu
+10480 gn of ram
+
+
+https://www.reddit.com/r/VFIO/comments/6iwth1/network_default_is_not_active_after_every/
+virsh net-list --all    
+virsh net-autostart default
+virsh net-start default
+virsh commands https://download.libvirt.org/virshcmdref/html  https://gist.github.com/archerslaw/9798802 domain name is machine name like win10
+virsh net-dumpxml  default
+
+
+
+sudo ip link set virbr0 down
+sudo brctl delbr virbr0
+virsh net-destroy default
+sudo brctl addif virbr0 vnet0
+sudo brctl addif virbr0 vnet0
+[sudo] password for amazon: 
+interface vnet0 does not exist!    <---------------------
+
+
+#Restart networking-----------------
+sudo ip link set virbr0 down
+sudo ip link list
+sudo brctl delbr virbr0
+virsh net-list --all
+sudo brctl delbr virbr0
+virsh net-destroy default
+virsh net-start default
+virsh net-autostart default
+sudo ip link set virbr0 up
+--->Restart QEMU as a whole. Not just the vm <-----
+
+vnet9 can refetch IP from GUI by clicking on referesh icon. Look at "i" information window on VM. Find interface and referesh it.
+
+https://www.spice-space.org/download.html 
+windows spice-guest-tools
+
+https://askubuntu.com/questions/1219817/how-to-set-up-dynamic-screen-sizing-for-a-qemu-windows-10-guest-on-ubuntu-18-04
+Point 3 and 12
+
+https://forum.proxmox.com/threads/spice-with-windows-10-mouse-does-not-work.69515/
+Citrix workspace is culprit
+proxmox - industry wrapper around pkvc qemu
+
+https://bbs.archlinux.org/viewtopic.php?id=243332
+Citrix workspace culprit for No mouse
+
+#mounting shared directory
+https://ubuntuforums.org/showthread.php?t=2495378
+https://www.debugpoint.com/share-folder-virt-manager/
+https://www.debugpoint.com/kvm-share-folder-windows-guest/   --- virtio-win-guest-tools.exe 
+
+---DID NOT Try below----
+qemu-system-x86_64 -device virtserialport,bus=virtio-serial0.0,nr=2,chardev=charchannel1,id=channel1,name=com.redhat.spice.0
+
+https://gist.github.com/plembo/21d4a1579850f7fe84301a90f4fcdf9a ON GUEST
+$ sudo apt install qemu-guest-agent
+$ sudo apt install spice-vdagent
+
+
+----------------------------------------------
+Google Reserve Call
+----------------------------------------------
+https://www.google.com/maps/reserve/dx/create?m=/m/04tz7n&kvi
+
+
+----------------------------------------------
+Use gnome except wayland
+----------------------------------------------
+https://askubuntu.com/questions/1410256/how-do-i-use-the-x-window-manager-instead-of-wayland-on-ubuntu-22-04
+/etc/gdm3/custom.conf
+WaylandEnable=false
+
+
+----------------------------------------------
+Nvidia Blank Screen
+----------------------------------------------
+Issue was modprobe wont see nvidia
+Result: Still lightdm and xfce crash with Nvidia installed
+
+lspci -nnk still show noveau drivers
+/etc/X11/xorg.conf was added "Files" and "ServerFlags"
+/var/lib/gdm3/.local/share/xorg/Xorg.0.log
+initramfs is ram file system used during init / boot <---reread this with init
+dpkg-reconfigure  gives you the option to change options on already installed packages
+aptitude reinstall pkg -- reinstalls already installed package
+~/.nvidia-settings-rc
+nvidia-smi shows which driver is being used 
+cat /proc/driver/nvidia/version 
