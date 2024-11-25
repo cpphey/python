@@ -211,6 +211,33 @@ settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
+custom_date =  '2024-11-20'
+
+#031162CF
+issue_date = ql.Date(10, 1, 2017)
+end_date = ql.Date(15, 6, 2051)
+coupon_rate = 0.04633
+price_mid = 85.849
+price_high = None
+price_low = None
+settlement_days = 1
+face_value = 100.0
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+custom_date =  '2024-11-22'
+
+#031162DR
+issue_date = ql.Date(2, 3, 2023)
+end_date = ql.Date(2, 3, 2033)
+coupon_rate = 0.0525
+price_mid = 100.0738
+price_high = None
+price_low = None
+settlement_days = 1
+face_value = 100.0
+bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
+day_counter = ql.Thirty360(ql.Thirty360.USA)
+custom_date =  '2024-11-22'
 
 # Setup schedule and bond
 today = datetime.date.today()

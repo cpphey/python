@@ -1,18 +1,18 @@
 import QuantLib as ql
 import datetime
 
-#00817YAZ
-issue_date = ql.Date(10, 8, 2017)
-end_date = ql.Date(15, 8, 2047)
-coupon_rate = 0.03875
-price_mid = 73.0595
+#031162DR
+issue_date = ql.Date(2, 3, 2023)
+end_date = ql.Date(2, 3, 2033)
+coupon_rate = 0.0525
+price_mid = 100.0738
 price_high = None
 price_low = None
 settlement_days = 1
 face_value = 100.0
 bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
 day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-20'
+custom_date =  '2024-11-22'
 #day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
 
 call_date = ql.Date(1, 5, 2023)  # Dummy call date
