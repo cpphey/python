@@ -1,292 +1,124 @@
 import QuantLib as ql
 import datetime
+import pandas as pd
 
-#https://pdfcoffee.com/bloomberg-per-security-manual-pdf-free.html
-#http://aspenres.com/bbgupgrade/bbfields.tbl
-
-#Input data
-#559665AB0
-#US559665AB08
-# issue_date = ql.Date(26, 11, 2024)
-# end_date = ql.Date(1, 12, 2032)
-# coupon_rate = 0.06875
-# price = 100.86951
-# settlement_days = 2
-# face_value = 100.0
-#bondCalendar = ql.UnitedStates()
-
-# issue_date = ql.Date(1, 11, 2024)
-# end_date = ql.Date(3, 6, 2030)
-# coupon_rate = 0.04513
-# price = 100.171
-# settlement_days = 2
-# face_value = 100.0
-#bondCalendar = ql.UnitedStates()
-
-#https://treasurydirect.gov/auctions/announcements-data-results/
-#https://treasurydirect.gov/auctions/auction-query/?cusip=912810UE6
-# issue_date = ql.Date(1, 11, 2024)
-# end_date = ql.Date(1, 11, 2031)
-# coupon_rate = 0.06625
-# price = 101.0625
-# settlement_days = 2
-# face_value = 100.0
-# bondCalendar = ql.Canada()
-
-#https://treasurydirect.gov/auctions/auction-query/?cusip=912810UE6
-# issue_date = ql.Date(15, 11, 2024)
-# end_date = ql.Date(15, 11, 2054)
-# coupon_rate = 0.045
-# price = 98.253773
-# settlement_days = 2
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
-
-#Y8
-# issue_date = ql.Date(31, 12, 2008)
-# end_date = ql.Date(1, 11, 2031)
-# coupon_rate = 0.08
-# price_mid = 111.361
-# price_high = 99.704
-# price_low = 99.704
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
-
-#B8
-# issue_date = ql.Date(5, 2, 1996)
-# end_date = ql.Date(5, 2, 2026)
-# coupon_rate = 0.0845
-# price_mid = 105.691
-# price_high = None
-# price_low = None
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar = ql.Canada()
-# day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
-
-#P8
-# issue_date = ql.Date(30, 5, 1995)
-# end_date = ql.Date(30, 5, 2025)
-# coupon_rate = 0.0875
-# price = 102.788
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar = ql.Canada()
-# day_counter  = ql.ActualActual(ql.ActualActual.ISMA)
-
-#p4
-# issue_date = ql.Date(28, 10, 2014)
-# end_date = ql.Date(1, 5, 2025)
-# coupon_rate = 0.05
-# price = 99.704
-# settlement_days = 0
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+# Load data from CSV
+csv_data = pd.read_csv('bond_data.csv')
 
 
-#g38
-# issue_date = ql.Date(17, 11, 2014)
-# end_date = ql.Date(15, 11, 2024)
-# coupon_rate = 0.0225
-# price = 100.185 #99.31
-# settlement_days = 2
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.GovernmentBond)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+def process_bond_data(row):
+    # Assign inputs from CSV
+    cusip = row['cusip']
+    issue_date = ql.DateParser.parseFormatted(row['issue_date'], '%m/%d/%Y') if pd.notna(row['issue_date']) else None
+    end_date = ql.DateParser.parseFormatted(row['end_date'], '%m/%d/%Y') if pd.notna(row['end_date']) else None
+    coupon_rate = row['coupon_rate'] / 100 if pd.notna(row['coupon_rate']) else None
+    price_mid = row['price_mid'] if pd.notna(row['price_mid']) else None
+    price_high = row['price_high'] if pd.notna(row['price_high']) else None
+    price_low = row['price_low'] if pd.notna(row['price_low']) else None
+    settlement_days = row['settlement_days'] if pd.notna(row['settlement_days']) else None
+    face_value = row['face_value'] if pd.notna(row['face_value']) else None
+    bondCalendar = eval(row['bond_calendar']) if pd.notna(row['bond_calendar']) else None  # ql.UnitedStates.Settlement
+    day_counter = eval(row['day_counter']) if pd.notna(row['day_counter']) else None  # ql.Thirty360.USA
+    custom_date = row['custom_date'] if pd.notna(row['custom_date']) else None if pd.notna(row['custom_date']) else None
 
-#W7
-# issue_date = ql.Date(15, 1, 2016)
-# end_date = ql.Date(15, 1, 2026)
-# coupon_rate = 0.0571
-# price = 99.8875
-# settlement_days = 2
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+    call_date = ql.DateParser.parseFormatted(row['call_date'], '%m/%d/%Y') if pd.notna(
+        row['call_date']) else None  # Dummy call date
+    call_price = row['call_price'] if pd.notna(row['call_price']) else None
+    spread = row['spread'] if pd.notna(row['spread']) else None
+    shock_size = row['shock_size'] if pd.notna(row['shock_size']) else None  # Call price_mid at par
+    benchmark_yield = row['benchmark_yield'] if pd.notna(row['benchmark_yield']) else None  # Dummy benchmark yield
 
-#1AH2
-# issue_date = ql.Date(28,4,2016)
-# end_date = ql.Date(15,4,2026)
-# coupon_rate = 0.05375
-# price = 100.0115
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+    # Cusip
+    print(f"Processing CUSIP: {cusip}")
 
-#GAE3
-# issue_date = ql.Date(11,3,2014)
-# end_date = ql.Date(15,3,2044)
-# coupon_rate = 0.05375
-# price = 93.117
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+    # Setup schedule and bond
+    today = datetime.date.today()
+    formatted_date = today.strftime('%Y-%m-%d') if custom_date is None else custom_date
+    todays_date = ql.DateParser.parseFormatted(formatted_date, '%Y-%m-%d')
+    print("Todays Date is: " + formatted_date)
+    ql.Settings.instance().evaluationDate = todays_date
 
-#2AS5
-# issue_date = ql.Date(10,5,2017)
-# end_date = ql.Date(15,3,2027)
-# coupon_rate = 0.05
-# price = 100.458
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
+    # Schedule
+    tenor = ql.Period(ql.Semiannual)
+    convention = ql.Unadjusted
+    terminationDateConvention = ql.Unadjusted
+    DateGeneration_Rule = ql.DateGeneration.Backward
+    endOfMonth = False
+    schedule = ql.Schedule(issue_date, end_date, tenor,
+                           bondCalendar, convention, terminationDateConvention,
+                           DateGeneration_Rule, endOfMonth)
 
-#VAB2
-# issue_date = ql.Date(8,2,2017)
-# end_date = ql.Date(15,8,2026)
-# coupon_rate = 0.05125
-# price = 99.9125
-# settlement_days = 1
-# face_value = 100.0
-# bondCalendar =  ql.UnitedStates(ql.UnitedStates.Settlement)
-# day_counter = ql.Thirty360(ql.Thirty360.USA)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/actualactual.hpp#L51
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/daycounters/thirty360.cpp
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/calendars/unitedstates.hpp
+    # FixedRateBond
+    paymentConvention = ql.Unadjusted
+    bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter,
+                            paymentConvention)  # added ql.Unadjusted
 
-#00206RLJ
-issue_date = ql.Date(3, 9, 2021)
-end_date = ql.Date(15, 9, 2055)
-coupon_rate = 0.0355
-price_mid = 68.581
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
+    # Yield to Maturity (YTM)
+    clean_price = price_mid
+    ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)  # SimpleThenCompounded
+    print(f"Yield to Maturity (YTM): {ytm * 100:.8f}%")
 
-#002824BG
-issue_date = ql.Date(22, 11, 2016)
-end_date = ql.Date(30, 11, 2036)
-coupon_rate = 0.0475
-price_mid = 97.2848
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
+    # Duration and Convexity
+    yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)  # SimpleThenCompounded
+    # yield_rate = ql.InterestRate(ytm, day_counter, ql.CompoundedThenSimple, ql.Semiannual)
 
-#00440EAW
-issue_date = ql.Date(3, 11, 2015)
-end_date = ql.Date(3, 11, 2045)
-coupon_rate = 0.0435
-price_mid = 86.5435
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-20'
+    # Calculate duration and convexity
+    duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
+    duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
+    duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
+    effective_mod_duration = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified) / (1 + ytm / 2)
+    effective_convexity = ql.BondFunctions.convexity(bond, yield_rate) / (1 + ytm / 2)
+    convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
 
-#00817YAF
-issue_date = ql.Date(9, 6, 2006)
-end_date = ql.Date(15, 6, 2036)
-coupon_rate = 0.06625
-price_mid = 107.1281
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-20'
+    print(f"Simple Duration: {duration_simple:.8f}")
+    print(f"Macaulay Duration: {duration_Macaulay:.8f}")
+    print(f"Modified Duration: {duration_modified:.8f}")
+    print(f"Effective Modified Duration: {effective_mod_duration:.8f}")
+    print(f"Effective Convexity: {effective_convexity:.8f}")
+    print(f"Convexity: {convexity:.8f}")
 
-#00817YAZ
-issue_date = ql.Date(10, 8, 2017)
-end_date = ql.Date(15, 8, 2047)
-coupon_rate = 0.03875
-price_mid = 73.0595
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-20'
+    # Effective Yield using QuantLib
+    effective_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual).equivalentRate(day_counter,
+                                                                                                    ql.Compounded,
+                                                                                                    ql.Annual,
+                                                                                                    todays_date,
+                                                                                                    end_date).rate()
+    print(f"Effective Yield (using QuantLib): {effective_rate * 100:.8f}%")
 
-#031162CF
-issue_date = ql.Date(10, 1, 2017)
-end_date = ql.Date(15, 6, 2051)
-coupon_rate = 0.04633
-price_mid = 85.849
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-22'
+    # Yield to Call (YTC) with Dummy Numbers
+    ytc = bond.bondYield(call_price, day_counter, ql.Compounded, ql.Semiannual, call_date)
+    print(f"Yield to Call with dummy (YTC) on {call_date}: {ytc * 100:.8f}%")
 
-#031162DR
-issue_date = ql.Date(2, 3, 2023)
-end_date = ql.Date(2, 3, 2033)
-coupon_rate = 0.0525
-price_mid = 100.0738
-price_high = None
-price_low = None
-settlement_days = 1
-face_value = 100.0
-bondCalendar = ql.UnitedStates(ql.UnitedStates.Settlement)
-day_counter = ql.Thirty360(ql.Thirty360.USA)
-custom_date =  '2024-11-22'
+    # Yield to Worst (YTW) with Dummy Numbers
+    ytw = min(ytm, ytc)  # Yield to worst is the minimum of YTM and YTC
+    print(f"Yield to Worst (YTW): {ytw * 100:.8f}%")
 
-# Setup schedule and bond
-today = datetime.date.today()
-formatted_date = today.strftime('%Y-%m-%d')
-todays_date = ql.DateParser.parseFormatted(formatted_date, '%Y-%m-%d')
-print("Todays Date is: "+formatted_date)
-ql.Settings.instance().evaluationDate = todays_date
+    # Credit Duration with Dummy Numbers
+    yield_rate_with_spread = ql.InterestRate(ytm + spread, day_counter, ql.Compounded, ql.Semiannual)
+    credit_duration = ql.BondFunctions.duration(bond, yield_rate_with_spread, ql.Duration.Modified)
+    print(f"Credit Duration (with dummy spread of {spread * 100:.2f}%): {credit_duration:.8f}")
 
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/schedule.hpp
-# schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
-#                        bondCalendar , ql.Unadjusted, ql.Unadjusted,
-#                        ql.DateGeneration.Backward, False)
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/businessdayconvention.hpp#L41
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/dategenerationrule.hpp#L39
-#https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/compounding.hpp#L32
-# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/time/frequency.hpp
-schedule = ql.Schedule(issue_date, end_date, ql.Period(ql.Semiannual),
-                       bondCalendar , ql.Following , ql.Following ,
-                       ql.DateGeneration.Backward, False)
-# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bonds/fixedratebond.cpp
-# https://github.com/lballabio/QuantLib/blob/1aae34679f0abd852b6dc90c72cd6deafbdb5c1e/ql/instruments/bond.cpp#L251
-bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, ql.Unadjusted )  #added ql.Unadjusted
+    # Delta with Dummy Numbers
+    yield_rate_shocked = ql.InterestRate(ytm + shock_size, day_counter, ql.Compounded, ql.Semiannual)
+    delta = (ql.BondFunctions.cleanPrice(bond, yield_rate_shocked) - ql.BondFunctions.cleanPrice(bond,
+                                                                                                 yield_rate)) / shock_size
+    print(f"Delta (with dummy shock of {shock_size * 100:.2f}%): {delta:.8f}")
 
-debug_price = bond.dirtyPrice(coupon_rate,ql.ActualActual(ql.ActualActual.ISMA),ql.Compounded,ql.Annual)-bond.accruedAmount(todays_date)
+    # Spread to Curve with Dummy Numbers
+    spread_to_curve = ytm - benchmark_yield
+    print(f"Spread to Curve (with dummy benchmark yield of {benchmark_yield * 100:.2f}%): {spread_to_curve * 100:.8f}%")
 
-#https://quant.stackexchange.com/questions/68450/quantlib-match-clean-price-with-bbg-clean-price
-#print(round(fixedRateBond.dirtyPrice(0.025,ql.ActualActual(ql.ActualActual.ISMA),
-#ql.Compounded,ql.Annual),6)-round(fixedRateBond.accruedAmount(ql.Date(15,10,2021)),3))
-print("debug")
+    # Spread to Worst with Dummy Numbers
+    spread_to_worst = ytw - benchmark_yield
+    print(f"Spread to Worst (with dummy benchmark yield of {benchmark_yield * 100:.2f}%): {spread_to_worst * 100:.8f}%")
 
-# Yield to Maturity (YTM)
-clean_price = price_mid
-ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual) #SimpleThenCompounded
-ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)
-print(f"Yield to Maturity (YTM): {ytm * 100:.4f}%")
-#https://github.com/lballabio/QuantLib/blob/9cd5eab83fb7990966538c850623a8ef8e0d5b95/ql/cashflows/cashflows.cpp#L717
-# QL_REQUIRE(y.compounding() == Compounded,
-#            "compounded rate required");
+    # Subtract 10 days from January 1, 2024 using QuantLib Date
+    initial_date = ql.Date(1, ql.January, 2024)
+    new_date = initial_date - 10
+    print(f"Initial Date: {initial_date}")
+    print(f"New Date after subtracting 10 days: {new_date}")
 
-# Duration and Convexity
-#yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)#SimpleThenCompounded
-yield_rate = ql.InterestRate(ytm, day_counter, ql.SimpleThenCompounded, ql.Semiannual)
 
-# Calculate duration and convexity
-#https://github.com/lballabio/QuantLib/blob/9cd5eab83fb7990966538c850623a8ef8e0d5b95/test-suite/bonds.cpp#L1749
-duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
-duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
-convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
-
-print(f"Simple Duration: {duration_simple:.8f}")
-#print(f"Modified Duration: {duration_modified:.8f}")
-print(f"Convexity: {convexity:.8f}")
+# Iterate over each row in the CSV and process the bond data
+for index, row in csv_data.iterrows():
+    process_bond_data(row)
