@@ -1,2 +1,3 @@
 cusip,issue_date,end_date,coupon_rate,price_mid,price_high,price_low,settlement_days,face_value,bond_calendar,day_counter,custom_date,call_date,call_price,spread,shock_size,benchmark_yield
+Y8,12/31/2008,11/01/2031,8,111.361,,,1,100,ql.UnitedStates(ql.UnitedStates.Settlement),ql.Thirty360(ql.Thirty360.USA),,,,,,
 031162DT,03/02/2023,03/02/2033,5.65,99.01035,,,1,100,ql.UnitedStates(ql.UnitedStates.Settlement),ql.Thirty360(ql.Thirty360.USA),11/22/2024,,,,,
