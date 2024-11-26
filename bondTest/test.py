@@ -9,13 +9,16 @@ csv_data = pd.read_csv('bond_data.csv')
 output_data = pd.DataFrame(columns=[
     'CUSIP', 'Yield to Maturity (YTM)', 'Simple Duration', 'Macaulay Duration', 'Modified Duration',
     'Effective Modified Duration', 'Effective Convexity', 'Convexity', 'Effective Yield',
-    'Yield to Call (YTC)', 'Yield to Worst (YTW)', 'Credit Duration', 'Delta', 'Spread to Curve', 'Spread to Worst'
+    'Yield to Call (YTC)', 'Yield to Worst (YTW)', 'Credit Duration', 'Delta', 'Spread to Curve', 'Spread to Worst',
+    'input_effective_mod_duration', 'input_duration_modified', 'input_duration_Macaulay', 'input_effective_convexity',
+    'input_convexity', 'input_spread_duration', 'input_ytm', 'input_effective_yield'
 ])
 
 def process_bond_data(row):
     global output_data
     # Assign inputs from CSV
     cusip = row['cusip']
+    sec_id = row['sec_id']
     issue_date = ql.DateParser.parseFormatted(row['issue_date'], '%m/%d/%Y') if pd.notna(row['issue_date']) else None
     end_date = ql.DateParser.parseFormatted(row['end_date'], '%m/%d/%Y') if pd.notna(row['end_date']) else None
     coupon_rate = row['coupon_rate'] / 100 if pd.notna(row['coupon_rate']) else None
@@ -26,14 +29,21 @@ def process_bond_data(row):
     face_value = row['face_value'] if pd.notna(row['face_value']) else None
     bondCalendar = eval(row['bond_calendar']) if pd.notna(row['bond_calendar']) else None  # ql.UnitedStates.Settlement
     day_counter = eval(row['day_counter']) if pd.notna(row['day_counter']) else None  # ql.Thirty360.USA
-    custom_date = row['custom_date'] if pd.notna(row['custom_date']) else None if pd.notna(row['custom_date']) else None
+    custom_date = row['custom_date'] if pd.notna(row['custom_date']) else None
+    input_effective_mod_duration = row['input_effective_mod_duration'] if pd.notna(row['input_effective_mod_duration']) else None
+    input_duration_modified = row['input_duration_modified'] if pd.notna(row['input_duration_modified']) else None
+    input_duration_Macaulay = row['input_duration_Macaulay'] if pd.notna(row['input_duration_Macaulay']) else None
+    input_effective_convexity = row['input_effective_convexity'] if pd.notna(row['input_effective_convexity']) else None
+    input_convexity = row['input_convexity'] if pd.notna(row['input_convexity']) else None
+    input_spread_duration = row['input_spread_duration'] if pd.notna(row['input_spread_duration']) else None
+    input_ytm = row['input_ytm'] if pd.notna(row['input_ytm']) else None
+    input_effective_yield = row['input_effective_yield'] if pd.notna(row['input_effective_yield']) else None
 
-    call_date = ql.DateParser.parseFormatted(row['call_date'], '%m/%d/%Y') if pd.notna(
-        row['call_date']) else None  # Dummy call date
+    call_date = ql.DateParser.parseFormatted(row['call_date'], '%m/%d/%Y') if pd.notna(row['call_date']) else None
     call_price = row['call_price'] if pd.notna(row['call_price']) else None
     spread = row['spread'] if pd.notna(row['spread']) else None
-    shock_size = row['shock_size'] if pd.notna(row['shock_size']) else None  # Call price_mid at par
-    benchmark_yield = row['benchmark_yield'] if pd.notna(row['benchmark_yield']) else None  # Dummy benchmark yield
+    shock_size = row['shock_size'] if pd.notna(row['shock_size']) else None
+    benchmark_yield = row['benchmark_yield'] if pd.notna(row['benchmark_yield']) else None
 
     # Cusip
     print(f"Processing CUSIP: {cusip}")
@@ -51,23 +61,19 @@ def process_bond_data(row):
     terminationDateConvention = ql.Unadjusted
     DateGeneration_Rule = ql.DateGeneration.Backward
     endOfMonth = False
-    schedule = ql.Schedule(issue_date, end_date, tenor,
-                           bondCalendar, convention, terminationDateConvention,
-                           DateGeneration_Rule, endOfMonth)
+    schedule = ql.Schedule(issue_date, end_date, tenor, bondCalendar, convention, terminationDateConvention, DateGeneration_Rule, endOfMonth)
 
     # FixedRateBond
     paymentConvention = ql.Unadjusted
-    bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter,
-                            paymentConvention)  # added ql.Unadjusted
+    bond = ql.FixedRateBond(settlement_days, face_value, schedule, [coupon_rate], day_counter, paymentConvention)
 
     # Yield to Maturity (YTM)
     clean_price = price_mid
-    ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)  # SimpleThenCompounded
+    ytm = bond.bondYield(clean_price, day_counter, ql.Compounded, ql.Semiannual)
     print(f"Yield to Maturity (YTM): {ytm * 100:.8f}%")
 
     # Duration and Convexity
-    yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)  # SimpleThenCompounded
-    # yield_rate = ql.InterestRate(ytm, day_counter, ql.CompoundedThenSimple, ql.Semiannual)
+    yield_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual)
 
     # Calculate duration and convexity
     duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
@@ -85,12 +91,9 @@ def process_bond_data(row):
     print(f"Convexity: {convexity:.8f}")
 
     # Effective Yield using QuantLib
-    effective_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual).equivalentRate(day_counter,
-                                                                                                    ql.Compounded,
-                                                                                                    ql.Annual,
-                                                                                                    todays_date,
-                                                                                                    end_date).rate()
-    print(f"Effective Yield (using QuantLib): {effective_rate * 100:.8f}%")
+    effective_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual).equivalentRate(day_counter, ql.Compounded, ql.Annual, todays_date, end_date).rate()
+    effective_yield = effective_rate * 100
+    print(f"Effective Yield (using QuantLib): {effective_yield:.8f}%")
 
     # Yield to Call (YTC) with Dummy Numbers
     ytc = None
@@ -101,7 +104,7 @@ def process_bond_data(row):
     # Yield to Worst (YTW) with Dummy Numbers
     ytw = None
     if ytc is not None:
-        ytw = min(ytm, ytc)  # Yield to worst is the minimum of YTM and YTC
+        ytw = min(ytm, ytc)
         print(f"Yield to Worst (YTW): {ytw * 100:.8f}%")
 
     # Credit Duration with Dummy Numbers
@@ -117,8 +120,7 @@ def process_bond_data(row):
     delta = None
     if shock_size is not None:
         yield_rate_shocked = ql.InterestRate(ytm + shock_size, day_counter, ql.Compounded, ql.Semiannual)
-        delta = (ql.BondFunctions.cleanPrice(bond, yield_rate_shocked) - ql.BondFunctions.cleanPrice(bond,
-                                                                                                     yield_rate)) / shock_size
+        delta = (ql.BondFunctions.cleanPrice(bond, yield_rate_shocked) - ql.BondFunctions.cleanPrice(bond, yield_rate)) / shock_size
         print(f"Delta (with dummy shock of {shock_size * 100:.2f}%): {delta:.8f}")
 
     # Spread to Curve with Dummy Numbers
@@ -136,21 +138,29 @@ def process_bond_data(row):
     # Append the results to the output DataFrame
     new_row = pd.DataFrame([{
         'CUSIP': cusip,
-        'Yield to Maturity (YTM)': ytm * 100,
-        'Simple Duration': duration_simple,
-        'Macaulay Duration': duration_Macaulay,
-        'Modified Duration': duration_modified,
-        'Effective Modified Duration': effective_mod_duration,
-        'Effective Convexity': effective_convexity,
-        'Convexity': convexity,
-        'Effective Yield': effective_rate * 100,
-        'Yield to Call (YTC)': ytc * 100 if ytc is not None else None,
-        'Yield to Worst (YTW)': ytw * 100 if ytw is not None else None,
-        'Credit Duration': credit_duration,
-        'Delta': delta,
-        'Spread to Curve': spread_to_curve * 100 if spread_to_curve is not None else None,
-        'Spread to Worst': spread_to_worst * 100 if spread_to_worst is not None else None,
-        'Formatted Date': formatted_date
+        'ytm': ytm * 100,
+        'duration_simple': duration_simple,
+        'duration_Macaulay': duration_Macaulay,
+        'duration_modified': duration_modified,
+        'effective_mod_duration': effective_mod_duration,
+        'effective_convexity': effective_convexity,
+        'convexity': convexity,
+        'effective_yield': effective_yield,
+        'ytc': ytc * 100 if ytc is not None else None,
+        'ytw': ytw * 100 if ytw is not None else None,
+        'credit_duration': credit_duration,
+        'delta': delta,
+        'spread_to_curve': spread_to_curve * 100 if spread_to_curve is not None else None,
+        'spread_to_worst': spread_to_worst * 100 if spread_to_worst is not None else None,
+        'input_effective_mod_duration': input_effective_mod_duration,
+        'input_duration_modified': input_duration_modified,
+        'input_duration_Macaulay': input_duration_Macaulay,
+        'input_effective_convexity': input_effective_convexity,
+        'input_convexity': input_convexity,
+        'input_spread_duration': input_spread_duration,
+        'input_ytm': input_ytm,
+        'input_effective_yield': input_effective_yield,
+        'formatted_date': formatted_date
     }])
     output_data = pd.concat([output_data, new_row], ignore_index=True)
 
@@ -159,5 +169,4 @@ for index, row in csv_data.iterrows():
     process_bond_data(row)
 
 # Write the output to a CSV file
-output_data = output_data.round(4) #4th decimal output only
 output_data.to_csv('processed_bond_data.csv', index=False)
