@@ -10,7 +10,7 @@ output_data = pd.DataFrame(columns=[
     'CUSIP', 'Yield to Maturity (YTM)', 'Simple Duration', 'Macaulay Duration', 'Modified Duration',
     'Effective Modified Duration', 'Effective Convexity', 'Convexity', 'Effective Yield',
     'Yield to Call (YTC)', 'Yield to Worst (YTW)', 'Credit Duration', 'Delta', 'Spread to Curve', 'Spread to Worst',
-    'input_effective_mod_duration', 'input_duration_modified', 'input_duration_Macaulay', 'input_effective_convexity',
+    'input_effective_mod_duration', 'input_duration_modified', 'input_duration_macaulay', 'input_effective_convexity',
     'input_convexity', 'input_spread_duration', 'input_ytm', 'input_effective_yield'
 ])
 
@@ -32,7 +32,7 @@ def process_bond_data(row):
     custom_date = row['custom_date'] if pd.notna(row['custom_date']) else None
     input_effective_mod_duration = row['input_effective_mod_duration'] if pd.notna(row['input_effective_mod_duration']) else None
     input_duration_modified = row['input_duration_modified'] if pd.notna(row['input_duration_modified']) else None
-    input_duration_Macaulay = row['input_duration_Macaulay'] if pd.notna(row['input_duration_Macaulay']) else None
+    input_duration_macaulay = row['input_duration_macaulay'] if pd.notna(row['input_duration_macaulay']) else None
     input_effective_convexity = row['input_effective_convexity'] if pd.notna(row['input_effective_convexity']) else None
     input_convexity = row['input_convexity'] if pd.notna(row['input_convexity']) else None
     input_spread_duration = row['input_spread_duration'] if pd.notna(row['input_spread_duration']) else None
@@ -154,7 +154,7 @@ def process_bond_data(row):
         'spread_to_worst': spread_to_worst * 100 if spread_to_worst is not None else None,
         'input_effective_mod_duration': input_effective_mod_duration,
         'input_duration_modified': input_duration_modified,
-        'input_duration_Macaulay': input_duration_Macaulay,
+        'input_duration_macaulay': input_duration_macaulay,
         'input_effective_convexity': input_effective_convexity,
         'input_convexity': input_convexity,
         'input_spread_duration': input_spread_duration,
