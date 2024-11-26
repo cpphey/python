@@ -164,9 +164,16 @@ def process_bond_data(row):
     }])
     output_data = pd.concat([output_data, new_row], ignore_index=True)
 
+def round_numerics(df, num):
+    for col in df.columns:
+        if df[col].dtype in ['float64', 'int64']:
+            df[col] = df[col].apply(lambda x: round(x, num))
+    return df
+
 # Iterate over each row in the CSV and process the bond data
 for index, row in csv_data.iterrows():
     process_bond_data(row)
 
 # Write the output to a CSV file
+round_numerics(output_data,4)
 output_data.to_csv('processed_bond_data.csv', index=False)
