@@ -8,9 +8,10 @@ def initialize_output_dataframe():
         'settlement_days', 'face_value', 'bondCalendar', 'day_counter', 'custom_date', 'input_effective_mod_duration',
         'input_duration_modified', 'input_duration_macaulay', 'input_effective_convexity', 'input_convexity',
         'input_spread_duration', 'input_ytm', 'input_effective_yield', 'call_date', 'call_price', 'spread',
-        'shock_size', 'benchmark_yield', 'formatted_date', 'ytm', 'duration_simple', 'duration_macaulay', 'duration_modified',
-        'effective_mod_duration', 'effective_convexity', 'convexity', 'effective_yield', 'ytc', 'ytw',
-        'credit_duration', 'delta', 'spread_to_curve', 'spread_to_worst'
+        'shock_size', 'benchmark_yield', 'formatted_date', 'ytm', 'duration_simple', 'duration_macaulay',
+        'duration_modified', 'effective_mod_duration', 'effective_mod_duration_2', 'effective_convexity',
+        'effective_convexity_2', 'convexity', 'effective_yield', 'ytc', 'ytw', 'credit_duration', 'delta',
+        'spread_to_curve', 'spread_to_worst'
     ])
 def ql_date_to_str(ql_date):
     ret = None
@@ -89,18 +90,30 @@ def process_bond_data(row, output_data):
     duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
     effective_mod_duration = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified) / (1 + ytm / 2)
     effective_convexity = ql.BondFunctions.convexity(bond, yield_rate) / (1 + ytm / 2)
+    effective_convexity = effective_convexity / 100
     convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
+
+    yield_change = 0.0001
+    price_minus_dy = bond.cleanPrice(ytm - yield_change, day_counter, ql.Compounded, ql.Semiannual)
+    price_plus_dy = bond.cleanPrice(ytm + yield_change, day_counter, ql.Compounded, ql.Semiannual)
+    effective_mod_duration_2 = (price_minus_dy - price_plus_dy) / 2 * price_mid * yield_change
+    effective_mod_duration_2 = effective_mod_duration_2 * 10000
+    effective_convexity_2 = (price_minus_dy - (2 * price_mid ) + price_plus_dy) / (price_mid * (yield_change ** 2))
+    effective_convexity_2 = effective_convexity_2 / 100
 
     print(f"Simple Duration: {duration_simple:.8f}")
     print(f"Macaulay Duration: {duration_macaulay:.8f}")
     print(f"Modified Duration: {duration_modified:.8f}")
     print(f"Effective Modified Duration: {effective_mod_duration:.8f}")
+    print(f"Effective Modified Duration 2: {effective_mod_duration_2:.8f}")
     print(f"Effective Convexity: {effective_convexity:.8f}")
+    print(f"Effective Convexity 2: {effective_convexity_2:.8f}")
     print(f"Convexity: {convexity:.8f}")
 
     # Effective Yield using QuantLib
     effective_rate = ql.InterestRate(ytm, day_counter, ql.Compounded, ql.Semiannual).equivalentRate(day_counter, ql.Compounded, ql.Annual, todays_date, end_date).rate()
     effective_yield = effective_rate * 100
+    effective_yield_abhi = ( ( 1+ ( ytm / 2 ) ) **2 ) - 1 #matched QL number - formula from google
     print(f"Effective Yield (using QuantLib): {effective_yield:.8f}%")
 
     # Yield to Call (YTC) with Dummy Numbers
@@ -178,7 +191,9 @@ def process_bond_data(row, output_data):
         'duration_macaulay': duration_macaulay,
         'duration_modified': duration_modified,
         'effective_mod_duration': effective_mod_duration,
+        'effective_mod_duration_2': effective_mod_duration_2,
         'effective_convexity': effective_convexity,
+        'effective_convexity_2': effective_convexity_2,
         'convexity': convexity,
         'effective_yield': effective_yield,
         'ytc': ytc * 100 if ytc is not None else None,
