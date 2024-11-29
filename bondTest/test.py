@@ -4,7 +4,7 @@ import pandas as pd
 def initialize_output_dataframe():
     # Initialize an empty DataFrame to store the results
     return pd.DataFrame(columns=[
-        'cusip', 'sec_id', 'issue_date', 'end_date', 'coupon_rate', 'price_mid', 'price_high', 'price_low',
+        'source', 'cusip', 'sec_id', 'issue_date', 'end_date', 'coupon_rate', 'price_mid', 'price_high', 'price_low',
         'settlement_days', 'face_value', 'bondCalendar', 'day_counter', 'custom_date', 'input_effective_mod_duration',
         'input_duration_modified', 'input_duration_macaulay', 'input_effective_convexity', 'input_convexity',
         'input_spread_duration', 'input_ytm', 'input_effective_yield', 'call_date', 'call_price', 'spread',
@@ -26,6 +26,7 @@ def round_numerics(df, num):
     return df
 def process_bond_data(row, output_data):
     # Assign inputs from CSV
+    source = row['source']
     cusip = row['cusip']
     sec_id = row['sec_id']
     issue_date = ql.DateParser.parseFormatted(row['issue_date'], '%m/%d/%Y') if pd.notna(row['issue_date']) else None
@@ -55,7 +56,7 @@ def process_bond_data(row, output_data):
     benchmark_yield = row['benchmark_yield'] if pd.notna(row['benchmark_yield']) else None
 
     # Cusip
-    print(f"Processing CUSIP: {cusip}")
+    print(f"Processing Source/CUSIP: {source}/{cusip}")
 
     # Setup schedule and bond
     today = datetime.date.today()
@@ -158,6 +159,7 @@ def process_bond_data(row, output_data):
 
     # Append the results to the output DataFrame
     new_row = pd.DataFrame([{
+        'source': source,
         'cusip': cusip,
         'sec_id': sec_id,
         'issue_date': ql_date_to_str(issue_date),
@@ -213,7 +215,11 @@ output_data = initialize_output_dataframe()
 
 # Iterate over each row in the CSV and process the bond data
 for index, row in csv_data.iterrows():
-    output_data=process_bond_data(row, output_data)
+    try:
+        output_data=process_bond_data(row, output_data)
+    except Exception as e:
+        print(f"An unexpected exception occurred : {e}")
+
 
 # Write the output to a CSV file
 round_numerics(output_data,4)
