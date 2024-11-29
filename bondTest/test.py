@@ -1,21 +1,29 @@
 import QuantLib as ql
 import datetime
 import pandas as pd
-
-# Load data from CSV
-csv_data = pd.read_csv('bond_data.csv')
-
-# Initialize an empty DataFrame to store the results
-output_data = pd.DataFrame(columns=[
-    'CUSIP', 'Yield to Maturity (YTM)', 'Simple Duration', 'Macaulay Duration', 'Modified Duration',
-    'Effective Modified Duration', 'Effective Convexity', 'Convexity', 'Effective Yield',
-    'Yield to Call (YTC)', 'Yield to Worst (YTW)', 'Credit Duration', 'Delta', 'Spread to Curve', 'Spread to Worst',
-    'input_effective_mod_duration', 'input_duration_modified', 'input_duration_macaulay', 'input_effective_convexity',
-    'input_convexity', 'input_spread_duration', 'input_ytm', 'input_effective_yield'
-])
-
-def process_bond_data(row):
-    global output_data
+def initialize_output_dataframe():
+    # Initialize an empty DataFrame to store the results
+    return pd.DataFrame(columns=[
+        'cusip', 'sec_id', 'issue_date', 'end_date', 'coupon_rate', 'price_mid', 'price_high', 'price_low',
+        'settlement_days', 'face_value', 'bondCalendar', 'day_counter', 'custom_date', 'input_effective_mod_duration',
+        'input_duration_modified', 'input_duration_macaulay', 'input_effective_convexity', 'input_convexity',
+        'input_spread_duration', 'input_ytm', 'input_effective_yield', 'call_date', 'call_price', 'spread',
+        'shock_size', 'benchmark_yield', 'formatted_date', 'ytm', 'duration_simple', 'duration_macaulay', 'duration_modified',
+        'effective_mod_duration', 'effective_convexity', 'convexity', 'effective_yield', 'ytc', 'ytw',
+        'credit_duration', 'delta', 'spread_to_curve', 'spread_to_worst'
+    ])
+def ql_date_to_str(ql_date):
+    ret = None
+    if ql_date is not None:
+        py_date = datetime.date(ql_date.year(), ql_date.month(), ql_date.dayOfMonth())
+        ret= py_date.strftime('%m/%d/%Y')
+    return ret
+def round_numerics(df, num):
+    for col in df.columns:
+        if df[col].dtype in ['float64', 'int64']:
+            df[col] = df[col].apply(lambda x: round(x, num))
+    return df
+def process_bond_data(row, output_data):
     # Assign inputs from CSV
     cusip = row['cusip']
     sec_id = row['sec_id']
@@ -77,14 +85,14 @@ def process_bond_data(row):
 
     # Calculate duration and convexity
     duration_simple = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Simple)
-    duration_Macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
+    duration_macaulay = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay)
     duration_modified = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified)
     effective_mod_duration = ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Modified) / (1 + ytm / 2)
     effective_convexity = ql.BondFunctions.convexity(bond, yield_rate) / (1 + ytm / 2)
     convexity = ql.BondFunctions.convexity(bond, yield_rate) / 100
 
     print(f"Simple Duration: {duration_simple:.8f}")
-    print(f"Macaulay Duration: {duration_Macaulay:.8f}")
+    print(f"Macaulay Duration: {duration_macaulay:.8f}")
     print(f"Modified Duration: {duration_modified:.8f}")
     print(f"Effective Modified Duration: {effective_mod_duration:.8f}")
     print(f"Effective Convexity: {effective_convexity:.8f}")
@@ -137,10 +145,37 @@ def process_bond_data(row):
 
     # Append the results to the output DataFrame
     new_row = pd.DataFrame([{
-        'CUSIP': cusip,
+        'cusip': cusip,
+        'sec_id': sec_id,
+        'issue_date': ql_date_to_str(issue_date),
+        'end_date': ql_date_to_str(end_date),
+        'coupon_rate': coupon_rate,
+        'price_mid': price_mid,
+        'price_high': price_high,
+        'price_low': price_low,
+        'settlement_days': settlement_days,
+        'face_value': face_value,
+        'bondCalendar': bondCalendar,
+        'day_counter': day_counter,
+        'custom_date': custom_date,
+        'input_effective_mod_duration': input_effective_mod_duration,
+        'input_duration_modified': input_duration_modified,
+        'input_duration_macaulay': input_duration_macaulay,
+        'input_effective_convexity': input_effective_convexity,
+        'input_convexity': input_convexity,
+        'input_spread_duration': input_spread_duration,
+        'input_ytm': input_ytm,
+        'input_effective_yield': input_effective_yield,
+        'call_date': ql_date_to_str(call_date),
+        'call_price': call_price,
+        'spread': spread,
+        'shock_size': shock_size,
+        'benchmark_yield': benchmark_yield,
+        #Outputs
+        'formatted_date': formatted_date,
         'ytm': ytm * 100,
         'duration_simple': duration_simple,
-        'duration_Macaulay': duration_Macaulay,
+        'duration_macaulay': duration_macaulay,
         'duration_modified': duration_modified,
         'effective_mod_duration': effective_mod_duration,
         'effective_convexity': effective_convexity,
@@ -151,28 +186,19 @@ def process_bond_data(row):
         'credit_duration': credit_duration,
         'delta': delta,
         'spread_to_curve': spread_to_curve * 100 if spread_to_curve is not None else None,
-        'spread_to_worst': spread_to_worst * 100 if spread_to_worst is not None else None,
-        'input_effective_mod_duration': input_effective_mod_duration,
-        'input_duration_modified': input_duration_modified,
-        'input_duration_macaulay': input_duration_macaulay,
-        'input_effective_convexity': input_effective_convexity,
-        'input_convexity': input_convexity,
-        'input_spread_duration': input_spread_duration,
-        'input_ytm': input_ytm,
-        'input_effective_yield': input_effective_yield,
-        'formatted_date': formatted_date
+        'spread_to_worst': spread_to_worst * 100 if spread_to_worst is not None else None
     }])
+    new_row = new_row.dropna(how='all')  # Remove rows with all NA values
     output_data = pd.concat([output_data, new_row], ignore_index=True)
+    return output_data
 
-def round_numerics(df, num):
-    for col in df.columns:
-        if df[col].dtype in ['float64', 'int64']:
-            df[col] = df[col].apply(lambda x: round(x, num))
-    return df
+# Main execution
+csv_data = pd.read_csv('bond_data.csv')
+output_data = initialize_output_dataframe()
 
 # Iterate over each row in the CSV and process the bond data
 for index, row in csv_data.iterrows():
-    process_bond_data(row)
+    output_data=process_bond_data(row, output_data)
 
 # Write the output to a CSV file
 round_numerics(output_data,4)
