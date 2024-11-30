@@ -551,7 +551,7 @@ https://github.com/libratbag/piper
 
 https://openrazer.github.io/#features
 https://polychromatic.app/download/ubuntu/
-
+/home/amazon/.config/openrazer
 -----------------------------------------------
 Skype webcam and mic
 -----------------------------------------------
