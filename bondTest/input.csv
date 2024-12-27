@@ -15,3 +15,6 @@ usd_fx,6M,0.076
 usd_fx,9M,0.077
 usd_fx,1Y,0.095
 usd_fx,2Y,0.097
+usd_govt_fwd,2Y5Y,0.025
+usd_govt_fwd,3Y5Y,0.071
+usd_govt_fwd,10Y5Y,0.021
