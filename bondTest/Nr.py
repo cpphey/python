@@ -6,29 +6,38 @@ import matplotlib.pyplot as plt
 
 def convert_tenor_to_months(tenor):
     """
-    Convert tenor strings (e.g., '1M', '6M', '1Y') to numeric values in months.
+    Convert tenor strings (e.g., 'Spot', '1W', '1M', '1Y') to numeric values in months.
     """
-    if tenor.endswith('M'):
-        return int(tenor[:-1])  # Remove 'M' and convert to integer
+    if tenor == "Spot":
+        return 0  # Spot corresponds to 0 months
+    elif tenor.endswith('W'):
+        return int(tenor[:-1]) / 4  # Weeks converted to months (approximation: 4 weeks = 1 month)
+    elif tenor.endswith('M'):
+        return int(tenor[:-1])  # Months
     elif tenor.endswith('Y'):
-        return int(tenor[:-1]) * 12  # Remove 'Y' and multiply by 12
+        return int(tenor[:-1]) * 12  # Years to months
     else:
         raise ValueError(f"Unsupported tenor format: {tenor}")
 
 
-def process_gov(df, output_dir=""):
+def process_curve(df, output_dir="", is_first=True):
     """
-    Process data for curves with the '_gov' suffix in their name.
+    Generic function to process curve data for '_gov' and '_fx' curves.
+    Writes fresh data for the first curve and appends data for subsequent curves.
 
-    df: DataFrame containing the curve data.
-    output_dir: Directory to save the output files (default is current directory).
+    df: DataFrame containing curve data.
+    output_dir: Directory to save the output files.
+    is_first: Whether this is the first curve being processed.
     """
-    # Convert tenor column to months
-    df['tenor'] = df['tenor'].apply(convert_tenor_to_months)
+    # Modify tenor safely using .loc
+    df.loc[:, 'tenor'] = df['tenor'].apply(convert_tenor_to_months)
 
     # Save the converted input data to input_converted.csv
     converted_input_file = f"{output_dir}input_converted.csv"
-    df.to_csv(converted_input_file, index=False)
+    if is_first:
+        df.to_csv(converted_input_file, index=False)  # Fresh write
+    else:
+        df.to_csv(converted_input_file, index=False, mode='a', header=False)  # Append
 
     # Sort data by tenor to ensure proper interpolation
     df = df.sort_values(by='tenor')
@@ -49,7 +58,10 @@ def process_gov(df, output_dir=""):
 
     # Save the interpolated data to output.csv
     output_file = f"{output_dir}output.csv"
-    output_df.to_csv(output_file, index=False)
+    if is_first:
+        output_df.to_csv(output_file, index=False)  # Fresh write
+    else:
+        output_df.to_csv(output_file, index=False, mode='a', header=False)  # Append
 
     # Plot both the original input data and the interpolated data
     plt.figure(figsize=(10, 6))
@@ -69,7 +81,7 @@ def process_gov(df, output_dir=""):
     plt.tight_layout()
 
     # Ensure plot is shown
-    plt.show(block=True)  # Force the plot to display
+    plt.show(block=True)
 
 
 def main():
@@ -80,9 +92,13 @@ def main():
     # Read input data
     df = pd.read_csv(input_file)
 
-    # Check for '_gov' in curve_name and process accordingly
-    if '_gov' in df['curve_name'].iloc[0]:
-        process_gov(df, output_dir)
+    # Process curves based on curve_name
+    unique_curves = df['curve_name'].unique()
+    is_first = True  # Track whether this is the first curve being processed
+    for curve in unique_curves:
+        curve_data = df[df['curve_name'] == curve]
+        process_curve(curve_data, output_dir, is_first)
+        is_first = False  # Subsequent curves will append to the files
 
 
 if __name__ == "__main__":
