@@ -1,0 +1,17 @@
+2024-12-27 15:05:00,437 - INFO - Starting processing of input file: input.csv
+2024-12-27 15:05:00,439 - INFO - Processing curve: usd_gov
+2024-12-27 15:05:00,440 - INFO - Processing curve: usd_gov
+2024-12-27 15:05:00,441 - INFO - Created new input_converted.csv file
+2024-12-27 15:05:00,442 - INFO - Created new output.csv file
+2024-12-27 15:05:00,442 - INFO - Plotting curve: usd_gov
+2024-12-27 15:05:02,133 - INFO - Processing curve: usd_fx
+2024-12-27 15:05:02,134 - INFO - Processing curve: usd_fx
+2024-12-27 15:05:02,136 - INFO - Appended to input_converted.csv file
+2024-12-27 15:05:02,138 - INFO - Appended to output.csv file
+2024-12-27 15:05:02,138 - INFO - Plotting curve: usd_fx
+2024-12-27 15:05:02,839 - INFO - Processing curve: usd_govt_fwd
+2024-12-27 15:05:02,840 - INFO - Processing forward curve: usd_govt_fwd
+2024-12-27 15:05:02,847 - INFO - Appended to input_converted.csv file
+2024-12-27 15:05:02,849 - INFO - Appended to output.csv file
+2024-12-27 15:05:02,849 - INFO - Plotting forward curve: usd_govt_fwd
+2024-12-27 15:05:04,440 - INFO - Completed processing of all curves

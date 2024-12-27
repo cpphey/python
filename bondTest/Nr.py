@@ -2,7 +2,11 @@ import pandas as pd
 import numpy as np
 from scipy.interpolate import make_interp_spline
 import matplotlib.pyplot as plt
+import logging
 
+# Configure logging
+logging.basicConfig(filename='Nr.log', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 def convert_tenor_to_months(tenor):
     """
@@ -28,6 +32,8 @@ def process_fwd(df, output_dir="", is_first=True):
     """
     Process data for forward curves with '_fwd' in their curve_name.
     """
+    logging.info("Processing forward curve: %s", df['curve_name'].iloc[0])
+
     # Convert tenor to start and end months
     ranges = df['tenor'].apply(convert_tenor_to_months)
     df = df.copy()  # Avoid SettingWithCopyWarning
@@ -55,8 +61,10 @@ def process_fwd(df, output_dir="", is_first=True):
     converted_input_file = f"{output_dir}input_converted.csv"
     if is_first:
         forward_df.to_csv(converted_input_file, index=False)
+        logging.info("Created new input_converted.csv file")
     else:
         forward_df.to_csv(converted_input_file, index=False, mode='a', header=False)
+        logging.info("Appended to input_converted.csv file")
 
     # Sort data and interpolate rates for output.csv
     fine_tenors = np.arange(forward_df['tenor'].min(), forward_df['tenor'].max() + 1, 1)
@@ -73,10 +81,13 @@ def process_fwd(df, output_dir="", is_first=True):
     output_file = f"{output_dir}output.csv"
     if is_first:
         output_df.to_csv(output_file, index=False)
+        logging.info("Created new output.csv file")
     else:
         output_df.to_csv(output_file, index=False, mode='a', header=False)
+        logging.info("Appended to output.csv file")
 
     # Plot
+    logging.info("Plotting forward curve: %s", forward_df['curve_name'].iloc[0])
     plt.figure(figsize=(10, 6))
     plt.plot(forward_df['tenor'], forward_df['rate'], 'o', label="Original Data (Input)", markersize=8)
     plt.plot(output_df['tenor'], output_df['rate'], '-', label="Interpolated Data (1M intervals)")
@@ -88,18 +99,21 @@ def process_fwd(df, output_dir="", is_first=True):
     plt.tight_layout()
     plt.show(block=True)
 
-
 def process_curve(df, output_dir="", is_first=True):
     """
     Generic function to process non-forward curves.
     """
+    logging.info("Processing curve: %s", df['curve_name'].iloc[0])
+
     df = df.copy()  # Avoid SettingWithCopyWarning
     df.loc[:, 'tenor'] = df['tenor'].apply(convert_tenor_to_months)
     converted_input_file = f"{output_dir}input_converted.csv"
     if is_first:
         df.to_csv(converted_input_file, index=False)
+        logging.info("Created new input_converted.csv file")
     else:
         df.to_csv(converted_input_file, index=False, mode='a', header=False)
+        logging.info("Appended to input_converted.csv file")
 
     df = df.sort_values(by='tenor')
     fine_tenors = np.arange(min(df['tenor']), max(df['tenor']) + 1, 1)
@@ -115,9 +129,13 @@ def process_curve(df, output_dir="", is_first=True):
     output_file = f"{output_dir}output.csv"
     if is_first:
         output_df.to_csv(output_file, index=False)
+        logging.info("Created new output.csv file")
     else:
         output_df.to_csv(output_file, index=False, mode='a', header=False)
+        logging.info("Appended to output.csv file")
 
+    # Plot
+    logging.info("Plotting curve: %s", df['curve_name'].iloc[0])
     plt.figure(figsize=(10, 6))
     plt.plot(df['tenor'], df['rate'], 'o', label="Original Data (Input)", markersize=8)
     plt.plot(output_df['tenor'], output_df['rate'], '-', label="Interpolated Data (1M intervals)")
@@ -129,15 +147,17 @@ def process_curve(df, output_dir="", is_first=True):
     plt.tight_layout()
     plt.show(block=True)
 
-
 def main():
     input_file = "input.csv"
     output_dir = ""
+
+    logging.info("Starting processing of input file: %s", input_file)
 
     df = pd.read_csv(input_file)
     unique_curves = df['curve_name'].unique()
     is_first = True
     for curve in unique_curves:
+        logging.info("Processing curve: %s", curve)
         curve_data = df[df['curve_name'] == curve]
         if '_fwd' in curve:
             process_fwd(curve_data, output_dir, is_first)
@@ -145,6 +165,7 @@ def main():
             process_curve(curve_data, output_dir, is_first)
         is_first = False
 
+    logging.info("Completed processing of all curves")
 
 if __name__ == "__main__":
     main()
