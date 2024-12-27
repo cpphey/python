@@ -1,0 +1,17 @@
+curve_name,tenor,rate
+usd_gov,1M, 0.027
+usd_gov,3M, 0.01
+usd_gov,6M, 0.02
+usd_gov,1Y, 0.03
+usd_gov,2Y, 0.04
+usd_fx,Spot,0.070
+usd_fx,1W,0.070
+usd_fx,2W,0.071
+usd_fx,3W,0.072
+usd_fx,1M,0.073
+usd_fx,2M,0.074
+usd_fx,3M,0.075
+usd_fx,6M,0.076
+usd_fx,9M,0.077
+usd_fx,1Y,0.095
+usd_fx,2Y,0.097

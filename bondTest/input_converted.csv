@@ -1,0 +1,6 @@
+curve_name,tenor,rate
+usd_gov,1,0.027
+usd_gov,3,0.01
+usd_gov,6,0.02
+usd_gov,12,0.03
+usd_gov,24,0.04
