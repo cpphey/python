@@ -72,9 +72,10 @@ Chrome Dark mode
 ---------------------------------------------
 
 chrome://flags/#enable-force-dark
-/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome2_user/ --new-window
-/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome3_user/ --new-window
-/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome4_user/ --new-window
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome2_user/ --new-window #HeyHo
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome3_user/ --new-window #AbhGs
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome4_user/ --new-window #AbhMo
+/opt/google/chrome/chrome --user-data-dir=/home/amazon/chrome5_user/ --new-window #cpphey
 
 
 ----------------------------------------------
@@ -92,6 +93,9 @@ https://askubuntu.com/questions/1120810/packages-have-unmet-dependencies
 ----------------------------------------------
 Microphone
 ---------------------------------------------
+Cron needs this line
+export XDG_RUNTIME_DIR=/run/user/1000 ; amixer set Capture nocap
+
 https://askubuntu.com/questions/12100/command-to-mute-and-unmute-a-microphone
 
 You can mute the microphone with : amixer set Capture nocap
@@ -534,6 +538,8 @@ If UI gnome acts strange , do gnome-shell --restart
 -----------------------------------------------
 Combination for stuck frozen kill
 -----------------------------------------------
+Enable
+https://linuxconfig.org/how-to-enable-all-sysrq-functions-on-linux
 
 alt+sysrq+f
 https://askubuntu.com/questions/1196857/the-altsysrqf-combination-dont-work-for-kill-the-task-taking-most-memory
@@ -808,6 +814,13 @@ qemu-img convert -f vdi -O raw /media/windows/VirtualBoxVMs/win/win.vdi win.img
 https://askubuntu.com/questions/345218/virt-manager-cant-connect-to-libvirt
 newgrp libvirt
 
+
+Changed /etc/fstab so everyone can access windows location see umask etc uid and pid etc
+#Commented this line out because uid and gid of 1000 was allowing only for amazon
+#/dev/disk/by-uuid/C6A0D43BA0D433A1 /media/windows ntfs-3g defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000,windows_names 0 0
+/dev/disk/by-uuid/C6A0D43BA0D433A1 /media/windows ntfs-3g defaults,nls=utf8,umask=000,dmask=000,fmask=000,windows_names 0 0
+
+
 https://askubuntu.com/questions/1375027/copy-paste-does-not-work-between-host-and-guest-ubuntu-spice-installed
 	
 
@@ -870,7 +883,16 @@ qemu-system-x86_64 -device virtserialport,bus=virtio-serial0.0,nr=2,chardev=char
 
 https://gist.github.com/plembo/21d4a1579850f7fe84301a90f4fcdf9a ON GUEST
 $ sudo apt install qemu-guest-agent
+
+
+$ sudo apt install qemu-system-x86
 $ sudo apt install spice-vdagent
+
+
+https://bugs.launchpad.net/ubuntu/+source/rust-virtiofsd/+bug/2054222
+$ sudo apt install virtiofsd
+sudo systemctl restart libvirtd spice-vdagentd
+sudo systemctl status libvirtd spice-vdagentd
 
 
 ----------------------------------------------
@@ -902,3 +924,61 @@ aptitude reinstall pkg -- reinstalls already installed package
 ~/.nvidia-settings-rc
 nvidia-smi shows which driver is being used 
 cat /proc/driver/nvidia/version 
+Xlog server log
+/home/amazon/.local/share/xorg/Xorg.0.log
+
+/etc/modprobe.d/blacklist-nvidia.conf
+blacklist nvidia
+blacklist nvidia_drm
+blacklist nvidia_modeset
+blacklist nvidia_uvm
+
+
+----------------------------------------------
+Chrome title bar
+----------------------------------------------
+https://askubuntu.com/questions/1280113/show-title-bar-for-google-chrome-in-ubuntu-20-04
+Right click on next to tab and select "Use system title bar and borders"
+
+
+----------------------------------------------
+Ubuntu increase volume
+----------------------------------------------
+https://www.debugpoint.com/boost-speaker-volume-ubuntu/
+Enable the “Over Amplification” switch on Settings->Sound
+
+----------------------------------------------
+Ubuntu chrome move tabs between windows
+----------------------------------------------
+sudo apt install chrome-gnome-shell
+This will install the necessary extension to allow Chrome to move windows in Ubuntu.
+
+----------------------------------------------
+Java version thinkorswim td
+----------------------------------------------
+/usr/lib/jvm/java-21-openjdk-amd64/bin/java --version
+/usr/lib/jvm/zulu17/bin/java --version
+/usr/lib/jvm/zulu21/bin/java --version
+
+export PATH=/usr/lib/jvm/zulu17/bin:/home/amazon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+cd ~/thinkorswim
+
+----------------------------------------------
+Battery Timeout
+----------------------------------------------
+
+/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout
+
+----------------------------------------------
+Battery Notifications
+----------------------------------------------
+
+https://askubuntu.com/questions/1235945/repetitive-battery-percentage-notifications-razer-20-04
+vim ~/.config/openrazer/razer.conf
+mouse_battery_notifier = True
+To change when it sends a notification, edit /usr/lib/python3/dist-packages/openrazer_daemon/misc/battery_notifier.py as root and set the interval at line 16:
+
+INTERVAL_FREQ = 60 * 10
+(In seconds, so 10 minutes)
+
+(Also note that editing this file will cause it to get overwritten when OpenRazer updates)
