@@ -802,6 +802,12 @@ gtk-launch chromium-browser1.desktop
 ----------------------------------------------
 qemu kvm virtual
 ----------------------------------------------
+
+# verifies OLDER instances are not running
+pkill virt-manager
+pgrep virt-manager 
+
+
 https://forums.virtualbox.org/viewtopic.php?f=2&t=105483
 VBoxManage setextradata "win" VBoxInternal/RamPreAlloc 1
 #This did not work
@@ -852,11 +858,29 @@ sudo ip link list
 sudo brctl delbr virbr0
 virsh net-list --all
 sudo brctl delbr virbr0
-virsh net-destroy default
-virsh net-start default
-virsh net-autostart default
+sudo virsh net-destroy default
+sudo virsh net-start default
+sudo virsh net-autostart default
 sudo ip link set virbr0 up
 --->Restart QEMU as a whole. Not just the vm <-----
+
+Quick fix
+# 1) See if default is already up
+virsh net-list --all
+
+# 2) Find who holds 192.168.122.1:53/67
+sudo ss -lupn | grep -E ':(53|67)\s'
+ps -ef | grep [d]nsmasq
+
+# 3) Kill the stale libvirt dnsmasq (safe)
+sudo pkill -f '/var/lib/libvirt/dnsmasq/default.conf'
+
+# 4) Reset the libvirt network & service
+sudo virsh net-destroy default 2>/dev/null
+sudo systemctl restart libvirtd   # or: sudo systemctl restart libvirt-daemon
+sudo virsh net-start default
+sudo virsh net-autostart default
+
 
 vnet9 can refetch IP from GUI by clicking on referesh icon. Look at "i" information window on VM. Find interface and referesh it.
 
@@ -982,3 +1006,51 @@ INTERVAL_FREQ = 60 * 10
 (In seconds, so 10 minutes)
 
 (Also note that editing this file will cause it to get overwritten when OpenRazer updates)
+
+
+----------------------------------------------
+google-chrome core pinning
+----------------------------------------------
+
+taskset -c 0-2 google-chrome &
+ps -eo pid,comm,psr | grep chrome
+
+----------------------------------------------
+xfce locks
+----------------------------------------------
+xfconf-query -c xfce4-session -p /general/LockCommand -s "xfce4-screensaver-command -l"
+
+Good one 👍 — here’s exactly what happens if you set those two different timers:
+
+Power Manager → Blank after 20 min:
+→ After 20 minutes of inactivity, DPMS will cut video output (monitor goes into standby / black).
+
+Screensaver → Activate after 1 min (with “Enable Lock Screen” ON):
+→ After 1 minute of inactivity, xfce4-screensaver will kick in, blank the screen inside the session, and lock it.
+
+
+----------------------------------------------
+Monitor Profiles
+----------------------------------------------
+#Did not work
+#xfconf-query -c displays -p /ActiveProfile -s "AbhiThreeMonitors" 
+#Below works
+
+Make it automatic each login:
+
+XFCE → Settings → Session and Startup → Application Autostart → Add
+
+Name: autorandr
+
+Command: autorandr --change
+
+autorandr --list #Show Configs
+autorandr --load Today #List
+
+----------------------------------------------
+github
+----------------------------------------------
+Different env in look at ~/.ssh/config
+Notice the -work at the end with ssh clone only
+git clone git@github.com-work:abhinavarorags/NA_Repo.git
+
