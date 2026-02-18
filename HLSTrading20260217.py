@@ -43,7 +43,7 @@ class Game:
     def which_winner(self, m1, m2):
         ret = None
         if m1 == m2:
-            ret = "tie"
+            ret = "ties" #BUG: Fixed typo by adding s at end
             return ret
 
         win_dict = {
@@ -51,7 +51,7 @@ class Game:
             Move.SCISSORS: Move.PAPER,
             Move.PAPER: Move.ROCK
         }
-        ret = "win" if win_dict[m1] == m2 else "loss"
+        ret = "wins" if win_dict[m1] == m2 else "losses" #BUG: Fixed typo by adding s at end
         return ret
 
     def play(self):
@@ -68,9 +68,9 @@ class Game:
             # Question --
             # result2 = self.which_winner(m2,m1)
             result2 = (
-                "tie" if result1 == "tie"
-                else "loss" if result1 == "win"
-                else "win"  # if result1 == "loss"
+                "ties" if result1 == "ties"
+                else "losses" if result1 == "wins"
+                else "wins"  # if result1 == "loss"
             )
             self.p1.recordResult(result1)
             self.p2.recordResult(result2)
