@@ -94,7 +94,10 @@ https://askubuntu.com/questions/1120810/packages-have-unmet-dependencies
 Microphone
 ---------------------------------------------
 Cron needs this line
-export XDG_RUNTIME_DIR=/run/user/1000 ; amixer set Capture nocap
+*/10 8-18 * * 1-5 export XDG_RUNTIME_DIR=/run/user/1000 ; amixer set Capture nocap
+
+export XDG_RUNTIME_DIR=/run/user/1000 ; amixer set Capture nocap; pactl set-source-mute @DEFAULT_SOURCE@ 1
+
 
 https://askubuntu.com/questions/12100/command-to-mute-and-unmute-a-microphone
 
@@ -216,6 +219,13 @@ https://askubuntu.com/questions/743446/reduce-size-of-printed-to-pdf-files
 
 gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen \
 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out.pdf in.pdf
+
+Merge pdfs
+pdftk 1.pdf 2.pdf 3.pdf cat output out.pdf
+
+Make pdfs grayscale
+gs -sOutputFile=out.pdf  -sDEVICE=pdfwrite -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray input.pdf
+
 
 -----------------------
 ADB Android Debug
@@ -1054,3 +1064,6 @@ Different env in look at ~/.ssh/config
 Notice the -work at the end with ssh clone only
 git clone git@github.com-work:abhinavarorags/NA_Repo.git
 
+
+================================================================
+/opt/Webex/bin/CiscoCollabHost
